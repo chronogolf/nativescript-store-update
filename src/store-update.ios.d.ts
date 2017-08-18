@@ -14,23 +14,27 @@ export interface AppleStoreResult {
 export declare class StoreUpdate extends Common {
     private ITUNES_BASE_URL;
     private BUNDLE_ID;
+    private _majorUpdateAlertType;
+    private _minorUpdateAlertType;
+    private _patchUpdateAlertType;
+    private _revisionUpdateAlertType;
     appID: string;
-    currentInstalledVersion: string;
-    currentAppStoreVersion: string;
     updateAvailableMessage: string;
-    theNewVersionMessage: string;
-    updateButtonText: string;
-    nextTimeButtonText: string;
-    skipButtonText: string;
     countryCode: string;
-    _showAlertAfterCurrentVersionHasBeenReleasedForDays: number;
+    notifyNbDaysAfterRelease: number;
     constructor();
-    versionNumber(): any;
+    localVersionNumber(): any;
     checkForUpdate(): void;
-    private _isUpdateCompatibleWithDeviceOS(appData);
+    private _isUpdateCompatibleWithDeviceOS(result);
+    private _hasBeenReleasedLongerThanDelay(result);
+    private _isAppStoreVersionNewer(result);
     private _parseResults(data);
-    private _isAppStoreVersionNewer(currentAppStoreVersion);
+    private _setupNotificationForUpdate(result);
+    private _showAlertIfCurrentAppStoreVersionNotSkipped(result);
+    private _isCurrentVersionSkipped(currentAppStoreVersion);
+    private _getUpdateTypeForVersion(currentAppStoreVersion);
+    private _getAlertTypeForVersion(currentAppStoreVersion);
+    private _showAlertForAppStoreVersion(result);
     private _launchAppStore(appID);
     private _getItunesLookupUrl();
-    private _isVersionHigher(left, right);
 }
