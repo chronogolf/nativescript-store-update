@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Mandatory -->
+  <string name="app_name">{N} Mise à jour automatique</string>
+  <string name="title_activity_kimera">Demo {N} Mise à jour automatique</string>
+
+  <string name="alert_title">Mise à jour disponible</string>
+  <string name="alert_message">Une nouvelle version est disponible sur le store</string>
+  <string name="alert_update_button">Mettre à jour</string>
+  <string name="alert_skip_button">Sauter cette version</string>
+</resources>
