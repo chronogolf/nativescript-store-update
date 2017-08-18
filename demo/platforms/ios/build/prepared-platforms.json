@@ -1,0 +1,9 @@
+{
+    "nativescript-store-update": true,
+    "nativescript-theme-core": true,
+    "nativescript-unit-test-runner": true,
+    "tns-core-modules": true,
+    "@types/moment": true,
+    "moment": true,
+    "tns-core-modules-widgets": true
+}

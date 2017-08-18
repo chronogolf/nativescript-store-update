@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+- '0.12'
+before_install:
+- npm install -g grunt-cli
+install:
+- npm install
+- grunt --no-color
+git:
+  submodules: false
+deploy:
+  provider: npm
+  email: nativescript@telerik.com
+  api_key:
+     secure: "ciybePiZ+eyQlAa+654VF2DJPdTMyLrwGM5It0IbuBEBHEwmns9hdsFT0rM5VAO6I59/JDZl0dZ+DePvvut1XXH1gOk4nHazfbsyYlcKR/ItQAuplWas3/OB3YTTRNulLjY7lzJgaZ/055vmeaxqn5wvXC9aPCrgnc1m6KTGEYgxtdgRcnp9Wc64hpOcrVH3GFcayYWOGEGj5SxxAtEh2AU/ogOKu0VyEJT2+LbrzXal+OFEjYGLQNOTinIVWZJlnF9kj+Joi7zvPUj0X3KmylsLaFEC6IPf19Q3WTxo5vlXaODjWVYiWqjUTYBNkLRzJ2dMk0dkomho1ISBv1OYXd5ddx+9641twUMjQMpPi5NVlAtxl3CJduxML0EQiDNVOYKtBG4LpGh8ED3QNroxxNjtur48rsCwH+GwAJ2F7iOXPKmCS/5NwyOZ1bMOIONH1LYQJwkKCbpuBoNTN9M3GTbr0RBunZYWR1Y8ouxE21i+cH5jUMy58Tgd/obWATo8HURgGMqT9ZJ7d5MSBoU9gvoQcS3uFTNC6zmjw+wYQOGelX4hCFuGOXKzpdZdzkeI1xN6hX/eZ8KHSHcdtxDBDkMV51tb1Ddis7UGGH0v9QZMYUViqky/36/2xGM2gCi5FudDLsFmiXXMj3zhtnjRK76xzAOhe2hldjpy2TxYzTk="
+  on:
+    tags: true
+    all_branches: true
