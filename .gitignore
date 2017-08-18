@@ -1,0 +1,13 @@
+*.js
+*.js.map
+*.log
+*.d.ts
+!index.d.ts
+demo/app/*.js
+demo/*.d.ts
+demo/platforms
+demo/node_modules
+demo/.vscode
+src/node_modules
+.vscode/
+*.DS_Store
