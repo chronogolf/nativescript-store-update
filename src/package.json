@@ -50,7 +50,9 @@
   "homepage": "https://github.com/chronogolf/nativescript-store-update",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "tns-core-modules": "^3.0.0"
+    "tns-core-modules": "^3.0.0",
+    "nativescript-i18n": "^0.2.2",
+    "nativescript-appversion": "^1.4.1"
   },
   "devDependencies": {
     "format": "^0.2.2",
@@ -64,7 +66,8 @@
   "dependencies": {
     "@types/moment": "^2.13.0",
     "moment": "2.18.1",
-    "nativescript-i18n": "^0.2.2"
+    "nativescript-i18n": "^0.2.2",
+    "nativescript-appversion": "^1.4.1"
   },
   "bootstrapper": "nativescript-plugin-seed"
 }

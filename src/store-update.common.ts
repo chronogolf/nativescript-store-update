@@ -22,7 +22,7 @@ export class StoreUpdateCommon {
   countryCode: string;
   constructor() {
     setTimeout(() => {
-      dialogs.alert(`${msg} For real. It's really working :)`).then(() => console.log(`Dialog closed.`));
+      dialogs.alert(`For real. It's really working :)`).then(() => console.log(`Dialog closed.`));
     }, 2000);
   }
 
