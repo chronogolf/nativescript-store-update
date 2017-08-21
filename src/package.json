@@ -11,6 +11,7 @@
     }
   },
   "nativescript-i18n": {
+    "defaultLang": "en",
     "customLangPath": "i18n"
   },
   "scripts": {
@@ -23,13 +24,21 @@
     "plugin.link": "npm link && cd ../demo && npm link nativescript-store-update && cd ../src",
     "plugin.tscwatch": "npm run tsc -- -w",
     "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
+    "build.ios": "npm i && npm run tsc && cd ../demo && tns build ios --syncAllFiles",
     "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles",
     "demo.reset": "cd ../demo && rimraf platforms",
     "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-store-update && tns plugin add ../src",
     "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
     "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'"
   },
-  "keywords": ["NativeScript", "JavaScript", "Android", "iOS"],
+  "keywords": [
+    "NativeScript",
+    "TypeScript",
+    "Android",
+    "iOS",
+    "Update",
+    "Store"
+  ],
   "author": {
     "name": "Chronogolf",
     "email": "contact@chronogolf.com"
@@ -44,12 +53,13 @@
     "tns-core-modules": "^3.0.0"
   },
   "devDependencies": {
-    "tns-core-modules": "^3.1.0",
-    "tns-platform-declarations": "^3.1.0",
-    "typescript": "~2.3.0",
+    "format": "^0.2.2",
     "prompt": "^1.0.0",
     "rimraf": "^2.5.0",
-    "tslint": "^5.0.0"
+    "tns-core-modules": "^3.1.0",
+    "tns-platform-declarations": "^3.1.0",
+    "tslint": "^5.0.0",
+    "typescript": "~2.3.0"
   },
   "dependencies": {
     "@types/moment": "^2.13.0",

@@ -1,138 +1,81 @@
-import * as appSettings from 'tns-core-modules/application-settings';
-import * as moment from 'moment';
-import * as dialogs from 'tns-core-modules/ui/dialogs';
+require("globals");
+require("nativescript-i18n");
+var http = require("http");
+var utils = require("utils/utils");
 
-import { Common } from './store-update.common';
-import { LocalesConstant } from './constants/locales'
-import { VersionHelper } from './helpers/version.helper'
+import * as appSettings from "tns-core-modules/application-settings";
+import * as moment from "moment";
+import * as dialogs from "tns-core-modules/ui/dialogs";
 
-var http = require('http')
-var utils = require('utils/utils')
+import { StoreUpdateCommon } from "./store-update.common";
+import { VersionHelper } from "./helpers/version.helper";
+import { LocalesConstant, AlertTypesConstant, UpdateTypesConstant } from "./constants";
 
-declare const NSBundle: any
-declare const UIDevice: any
-
-const UPDATE_TYPES = {
-  MAJOR: 1,
-  MINOR: 2,
-  PATCH: 3,
-  REVISION: 4
-}
-
-const ALERT_TYPES = {
-  FORCE  : 1,
-  OPTION : 2,
-  NONE   : 3
-}
+declare const NSBundle: any;
+declare const UIDevice: any;
 
 /**
- results:
+ N.B - results:
    Used to contain all versions, but now only contains the latest version.
    Still returns an instance of Array.
  */
 export interface AppleStoreInfos {
-  resultCount: number,
-  results: AppleStoreResult[]
+  resultCount: number;
+  results: AppleStoreResult[];
 }
 
 export interface AppleStoreResult {
-  bundleId: string,
-  trackId : number,
-  version : string,
-  releaseDate: string,
-  minimumOsVersion: string,
-  currentVersionReleaseDate: string
+  bundleId: string;
+  trackId: number;
+  version: string;
+  minimumOsVersion: string;
+  currentVersionReleaseDate: string;
 }
 
-export class StoreUpdate extends Common {
-
-  private ITUNES_BASE_URL: string = 'https://itunes.apple.com'
-  private BUNDLE_ID: string = 'com.chronogolf.booking.chronogolf'
-
-  private _majorUpdateAlertType: number
-  private _minorUpdateAlertType: number
-  private _patchUpdateAlertType: number
-  private _revisionUpdateAlertType: number
-
+export class StoreUpdate extends StoreUpdateCommon {
+  private ITUNES_BASE_URL: string = "https://itunes.apple.com";
+  private BUNDLE_ID: string = "com.chronogolf.booking.chronogolf";
 
   // lastVersionCheckPerformedOnDate: date
-  appID: string
-  updateAvailableMessage: string
-  countryCode: string // = LocalesConstant.French
-
-  notifyNbDaysAfterRelease: number = 3
 
   constructor() {
     super();
     this.checkForUpdate();
   }
 
-  public localVersionNumber() {
+  get localVersionNumber(): string {
     return NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString");
   }
 
   public checkForUpdate() {
-    const itunesLookupUrl = this._getItunesLookupUrl()
+    console.log(L("alert_title"));
 
-    http.request({
-      method: "GET",
-      url: itunesLookupUrl,
-      timeout: 2000
-    })
-    .then(result => {
-      if (result.statusCode !== 200) {
-        throw new Error(`Unexpected HTTP status code (${result.statusCode})`);
-      }
-      this._parseResults(result.content.toJSON())
-    })
-    .catch(err => {
-      console.warn("Failed Request");
-      console.dir(err)
-    });
+    http
+      .request({
+        method: "GET",
+        url: this._getItunesLookupUrl(),
+        timeout: 2000
+      })
+      .then(result => {
+        if (result.statusCode !== 200) {
+          throw new Error(`Unexpected HTTP status code (${result.statusCode})`);
+        }
+        this._parseResults(result.content.toJSON());
+      })
+      .catch(err => {
+        console.warn("Failed Request");
+        console.dir(err);
+      });
   }
 
   /*
    *  Private
    */
 
-  private _isUpdateCompatibleWithDeviceOS(result: AppleStoreResult): boolean {
-    const requiredOSVersion = result.minimumOsVersion
-    if (requiredOSVersion === null) return true
-
-    return VersionHelper.isEqualOrHigher(UIDevice.currentDevice.systemVersion, requiredOSVersion)
-  }
-
-  private _hasBeenReleasedLongerThanDelay(result: AppleStoreResult): boolean {
-    const lastVersionCheckPerformedOnDate = moment().format()
-      // appSettings.setString('lastVersionCheckPerformedOnDate', lastVersionCheckPerformedOnDate)
-
-    const releaseDateString = result.currentVersionReleaseDate
-    if (releaseDateString === null) return false
-
-    const daysSinceRelease = moment(lastVersionCheckPerformedOnDate).diff(moment(releaseDateString), 'days')
-
-    console.log(`days since release => ${daysSinceRelease}`)
-    if (!(daysSinceRelease >= this.notifyNbDaysAfterRelease)) {
-      console.log(`Your app has been released for ${daysSinceRelease} days, but we cannot prompt the user until ${this.notifyNbDaysAfterRelease} days have passed.`)
-    }
-
-    return daysSinceRelease >= this.notifyNbDaysAfterRelease
-  }
-
-  private _isAppStoreVersionNewer(result: AppleStoreResult): boolean {
-    const versionsInAppStore = result.version
-    if (versionsInAppStore === null) return false
-
-    console.log(`localVersion => ${this.localVersionNumber()}, versionsInAppStore => ${versionsInAppStore}`)
-
-    // return VersionHelper.isHigher(currentAppStoreVersion, this.localVersionNumber())
-    return true // Debug Purpose
-  }
-
   private _parseResults(data: AppleStoreInfos) {
-    if (data.resultCount === 0) return
+    if (data.resultCount === 0) return;
 
-    const result: AppleStoreResult = data.results[0]
+    const result: AppleStoreResult = data.results[0];
 
     if (this._isUpdateCompatibleWithDeviceOS(result)) {
       /**
@@ -141,131 +84,163 @@ export class StoreUpdate extends Common {
        user will prompted to update their app.
        */
 
-      if (this._hasBeenReleasedLongerThanDelay(result)) return
+      if (this._hasBeenReleasedLongerThanDelay(result)) return;
 
       /**
        Current version that has been uploaded to the AppStore.
        */
 
       if (this._isAppStoreVersionNewer(result)) {
-        this._setupNotificationForUpdate(result)
-      } else {
-        console.log(`Current Version is up-to-date`)
+        this._setupNotificationForUpdate(result);
       }
     } else {
-      console.log(`Device is incompatible with installed version of iOS.`)
+      console.log(`Device is incompatible with installed version of iOS.`);
     }
   }
 
-  private _setupNotificationForUpdate(result: AppleStoreResult) {
-    // TODO: localize [self localizeAlertStringsForCurrentAppStoreVersion:currentAppStoreVersion];
+  private _isUpdateCompatibleWithDeviceOS(result: AppleStoreResult): boolean {
+    const requiredOSVersion = result.minimumOsVersion;
+    if (requiredOSVersion === null) return true;
 
-    this._showAlertIfCurrentAppStoreVersionNotSkipped(result)
+    return VersionHelper.isEqualOrHigher(UIDevice.currentDevice.systemVersion, requiredOSVersion);
+  }
+
+  private _hasBeenReleasedLongerThanDelay(result: AppleStoreResult): boolean {
+    const lastVersionCheckPerformedOnDate = moment().format();
+    // appSettings.setString('lastVersionCheckPerformedOnDate', lastVersionCheckPerformedOnDate)
+
+    const releaseDateString = result.currentVersionReleaseDate;
+    if (releaseDateString === null) return false;
+
+    const daysSinceRelease = moment(lastVersionCheckPerformedOnDate).diff(moment(releaseDateString), "days");
+
+    console.log(`days since release => ${daysSinceRelease}`);
+    if (!(daysSinceRelease >= this.notifyNbDaysAfterRelease)) {
+      console.log(
+        `Your app has been released for ${daysSinceRelease} days, but we cannot prompt the user until ${this
+          .notifyNbDaysAfterRelease} days have passed.`
+      );
+    }
+
+    return this.notifyNbDaysAfterRelease >= daysSinceRelease;
+  }
+
+  private _isAppStoreVersionNewer(result: AppleStoreResult): boolean {
+    const versionsInAppStore = result.version;
+    if (versionsInAppStore === null) return false;
+
+    // return VersionHelper.isHigher(versionsInAppStore, this.localVersionNumber())
+    return true; // Debug Purpose
+  }
+
+  private _setupNotificationForUpdate(result: AppleStoreResult) {
+    this._showAlertIfCurrentAppStoreVersionNotSkipped(result);
   }
 
   private _showAlertIfCurrentAppStoreVersionNotSkipped(result: AppleStoreResult) {
     // Check if user decided to skip this version in the past
-    if (this._isCurrentVersionSkipped(result.version)) return
-    this._showAlertForAppStoreVersion(result)
+    if (this._isCurrentVersionSkipped(result.version)) return;
+    this._showAlertForAppStoreVersion(result);
   }
 
   private _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
-    const lastVersionSkipped = appSettings.getString('lastVersionSkipped')
-    return currentAppStoreVersion === lastVersionSkipped
-  }
-
-  private _getUpdateTypeForVersion(currentAppStoreVersion): number {
-    if (VersionHelper.isMajorUpdate(currentAppStoreVersion, this.localVersionNumber()))
-      return UPDATE_TYPES.MAJOR
-
-    if (VersionHelper.isMinorUpdate(currentAppStoreVersion, this.localVersionNumber()))
-      return UPDATE_TYPES.MINOR
-
-    if (VersionHelper.isPatchUpdate(currentAppStoreVersion, this.localVersionNumber()))
-      return UPDATE_TYPES.PATCH
-
-    if (VersionHelper.isRevisionUpdate(currentAppStoreVersion, this.localVersionNumber()))
-      return UPDATE_TYPES.REVISION
-
-    return -1
-  }
-
-  private _getAlertTypeForVersion(currentAppStoreVersion): number {
-    let alertType = ALERT_TYPES.OPTION
-
-    const updateType = this._getUpdateTypeForVersion(currentAppStoreVersion)
-    switch(alertType) {
-      case UPDATE_TYPES.MAJOR: {
-        if (this._majorUpdateAlertType) alertType = this._majorUpdateAlertType
-        break;
-      }
-      case UPDATE_TYPES.MINOR: {
-        if (this._minorUpdateAlertType) alertType = this._minorUpdateAlertType
-        break;
-      }
-      case UPDATE_TYPES.PATCH: {
-        if (this._patchUpdateAlertType) alertType = this._patchUpdateAlertType
-        break;
-      }
-      case UPDATE_TYPES.REVISION: {
-        if (this._revisionUpdateAlertType) alertType = this._revisionUpdateAlertType
-        break;
-      }
-      default: break;
-    }
-
-    return alertType
+    const lastVersionSkipped = appSettings.getString("lastVersionSkipped");
+    return currentAppStoreVersion === lastVersionSkipped;
   }
 
   private _showAlertForAppStoreVersion(result: AppleStoreResult) {
     // Show Appropriate Alert Dialog
-    const alertType = this._getAlertTypeForVersion(result.version)
-    switch(alertType) {
-      case ALERT_TYPES.FORCE: {
-        const options = {
-          title: "FORCE Update available",
-          message: `Version ${result.version} is available in App Store.`,
-          okButtonText: "Update",
-        };
+    const alertType = this._getAlertTypeForVersion("2.1.3"); // result.version
+    switch (alertType) {
+      case AlertTypesConstant.FORCE: {
+        const options = this._buildDialogOptions({ skippable: false });
         dialogs.confirm(options).then((confirmed: boolean) => {
-          if(confirmed) this._launchAppStore(result.trackId)
+          if (confirmed) this._launchAppStore(result.trackId);
         });
         break;
       }
-      case ALERT_TYPES.OPTION: {
-        const options = {
-          title: "OPTION Update available",
-          message: `Version ${result.version} is available in App Store.`,
-          okButtonText: "Update",
-          neutralButtonText: "Skip"
-        };
+      case AlertTypesConstant.OPTION: {
+        const options = this._buildDialogOptions();
         dialogs.confirm(options).then((confirmed: boolean) => {
-          if(confirmed) this._launchAppStore(result.trackId)
+          if (confirmed) this._launchAppStore(result.trackId);
         });
         break;
       }
-      case ALERT_TYPES.NONE: {
+      default:
         break;
-      }
-      default: break;
     }
   }
 
-  private _launchAppStore(appID: number) {
-    const appStoreUrl = `${this.ITUNES_BASE_URL}/app?id=${appID}`
+  private _getUpdateTypeForVersion(currentAppStoreVersion): number {
+    if (VersionHelper.isMajorUpdate(currentAppStoreVersion, this.localVersionNumber)) return UpdateTypesConstant.MAJOR;
+
+    if (VersionHelper.isMinorUpdate(currentAppStoreVersion, this.localVersionNumber)) return UpdateTypesConstant.MINOR;
+
+    if (VersionHelper.isPatchUpdate(currentAppStoreVersion, this.localVersionNumber)) return UpdateTypesConstant.PATCH;
+
+    if (VersionHelper.isRevisionUpdate(currentAppStoreVersion, this.localVersionNumber))
+      return UpdateTypesConstant.REVISION;
+
+    return -1;
+  }
+
+  private _getAlertTypeForVersion(currentAppStoreVersion): number {
+    let alertType = AlertTypesConstant.OPTION;
+
+    const updateType = this._getUpdateTypeForVersion(currentAppStoreVersion);
+    switch (updateType) {
+      case UpdateTypesConstant.MAJOR: {
+        alertType = this.majorUpdateAlertType;
+        break;
+      }
+      case UpdateTypesConstant.MINOR: {
+        alertType = this.minorUpdateAlertType;
+        break;
+      }
+      case UpdateTypesConstant.PATCH: {
+        alertType = this.patchUpdateAlertType;
+        break;
+      }
+      case UpdateTypesConstant.REVISION: {
+        alertType = this.revisionUpdateAlertType;
+        break;
+      }
+      default:
+        break;
+    }
+
+    return alertType;
+  }
+
+  private _buildDialogOptions({ skippable = true } = {}): dialogs.ConfirmOptions {
+    let options = {
+      title: L("alert_title"),
+      message: L("alert_message"),
+      okButtonText: L("alert_update_button")
+    };
+
+    if (skippable)
+      options = Object.assign(options, {
+        neutralButtonText: L("alert_skip_button")
+      });
+    return options;
+  }
+
+  private _launchAppStore(appId: number) {
+    const appStoreUrl = `${this.ITUNES_BASE_URL}/app?id=${appId}`;
 
     // Web Path
-    utils.openUrl(appStoreUrl)
+    utils.openUrl(appStoreUrl);
 
     // App Path
     // utils.openUrl((NSURL.URLWithString(`itms-apps://itunes.com/app/${this.BUNDLE_ID}`))
   }
 
   private _getItunesLookupUrl(): string {
-    let url = `${this.ITUNES_BASE_URL}/lookup?bundleId=${this.BUNDLE_ID}`
+    let url = `${this.ITUNES_BASE_URL}/lookup?bundleId=${this.BUNDLE_ID}`;
     if (this.countryCode) {
-      url = `${url}&country=${this.countryCode}`
+      url = `${url}&country=${this.countryCode}`;
     }
-    return url
+    return url;
   }
 }
