@@ -8,6 +8,9 @@ export declare class StoreUpdate extends StoreUpdateCommon {
     readonly localVersionNumber: string;
     checkForUpdate(): void;
     private _initAppInfos();
-    private _checkAppDate(storeDate);
-    private _checkAppVersion(storeVersion);
+    private _appWasUpdated(storeDate);
+    private _checkAppVersion(versions);
+    private _showMajorUpdateAlert(versions);
+    private _showMinorUpdateAlert(versions);
+    private _showPatchUpdateAlert(versions);
 }

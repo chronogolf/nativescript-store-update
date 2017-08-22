@@ -1,5 +1,6 @@
 import { StoreUpdateCommon } from './store-update.common'
 import { GooglePlayHelper } from './helpers/google-play.helper'
+import { VersionHelper } from './helpers/version.helper'
 import { getVersionCode, getVersionName } from 'nativescript-appversion'
 import { alert } from 'tns-core-modules/ui/dialogs'
 
@@ -8,12 +9,7 @@ export class StoreUpdate extends StoreUpdateCommon {
     version: '',
     build  : ''
   }
-  // public versionNumber() {
-  //   var PackageManager = android.content.pm.PackageManager;
-  //   var pkg = application.android.context.getPackageManager().getPackageInfo(application.android.context.getPackageName(),
-  //     PackageManager.GET_META_DATA);
-  //   return pkg.versionName;
-  //   }
+
   constructor() {
     super();
     this._initAppInfos()
@@ -24,23 +20,13 @@ export class StoreUpdate extends StoreUpdateCommon {
     return `${this.appInfo.version}.${this.appInfo.build}`;
   }
 
-  // isVersionDownloadableNewer(mActivity: Activity, versionDownloadable: string): boolean {
-  //     let versionInstalled: string = null;
-  //     try {
-  //       versionInstalled = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
-  //     } catch (PackageManager.NameNotFoundException ignored) { }
-  //     if (versionInstalled.equals(versionDownloadable)) { // If it is equal, no new version downloadable
-  //         return false;
-  //     } else {
-  //         return versionCompareNumerically(versionDownloadable, versionInstalled) > 0; // Return if the versionDownloadble is newer than the installed
-  //     }
-  // }
-
   checkForUpdate() {
-    GooglePlayHelper.getAppInfos()
+    GooglePlayHelper.getAppInfos('com.bitstrips.imoji')
       .then(infos => {
-        this._checkAppVersion(infos.version)
-        this._checkAppDate(infos.date)
+        this._checkAppVersion({
+          local: this.appInfo.version,
+          store: infos.version
+        })
       })
       .catch(console.error)
   }
@@ -50,7 +36,7 @@ export class StoreUpdate extends StoreUpdateCommon {
     getVersionCode().then(v => this.appInfo.build = v)
   }
 
-  private _checkAppDate(storeDate) {
+  private _appWasUpdated(storeDate) {
     alert(`
       local: ${new Date().toISOString()}
       vs
@@ -58,11 +44,44 @@ export class StoreUpdate extends StoreUpdateCommon {
     `)
   }
 
-  private _checkAppVersion(storeVersion) {
+  private _checkAppVersion(versions) {
+    if (VersionHelper.isMajorUpdate(versions.store, versions.local)) {
+      return this._showMajorUpdateAlert(versions)
+    }
+
+    if (VersionHelper.isMinorUpdate(versions.store, versions.local)) {
+      return this._showMinorUpdateAlert(versions)
+    }
+
+    if (VersionHelper.isPatchUpdate(versions.store, versions.local)) {
+      return this._showPatchUpdateAlert(versions)
+    }
+  }
+
+  private _showMajorUpdateAlert(versions) {
     alert(`
-      local: ${this.appInfo.version}
-      vs
-      distant: ${storeVersion}
-    `)
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a major version update !
+  `)
+  }
+
+  private _showMinorUpdateAlert(versions) {
+    alert(`
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a minor version update !
+  `)
+  }
+
+  private _showPatchUpdateAlert(versions) {
+    alert(`
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a patch version update !
+  `)
   }
 }
