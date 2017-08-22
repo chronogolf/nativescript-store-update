@@ -1,11 +1,7 @@
-import { StoreUpdateCommon } from "./store-update.common";
+import { StoreUpdateCommon } from './store-update.common'
+import { GooglePlayHelper } from './helpers/google-play.helper'
 import { getVersionCode, getVersionName } from 'nativescript-appversion'
-
-const PLAY_STORE_ROOT_WEB: string = "https://play.google.com/store/apps/details?hl=en&id=";
-const PLAY_STORE_HTML_TAGS_TO_GET_RIGHT_POSITION: string = 'itemprop="softwareVersion"> ';
-const PLAY_STORE_HTML_TAGS_TO_REMOVE_USELESS_CONTENT: string = "  </div> </div>";
-const PLAY_STORE_PACKAGE_NOT_PUBLISHED_IDENTIFIER: string =
-  "We're sorry, the requested URL was not found on this server.";
+import { alert } from 'tns-core-modules/ui/dialogs'
 
 export class StoreUpdate extends StoreUpdateCommon {
   appInfo: { version: string, build: string} = {
@@ -41,24 +37,32 @@ export class StoreUpdate extends StoreUpdateCommon {
   // }
 
   checkForUpdate() {
-    fetch(`${PLAY_STORE_ROOT_WEB}com.shots.android`)
-      .then(r => r.text())
-      .then(p => {
-        const versionRegex = /itemprop="softwareVersion">\s*([0-9.]*)\s*<\/div>\s*<\/div>/gm
-        const dateRegex = /itemprop="datePublished">\s*([\w\s,]*)\s*<\/div>\s*<\/div>/gm
-        const version = versionRegex.exec(p)[1]
-        const date = dateRegex.exec(p)[1]
-        console.dir(version)
-        console.dir(date)
+    GooglePlayHelper.getAppInfos()
+      .then(infos => {
+        this._checkAppVersion(infos.version)
+        this._checkAppDate(infos.date)
       })
-      .catch(error => {
-        console.error(error)
-      })
+      .catch(console.error)
   }
-
 
   private _initAppInfos() {
     getVersionName().then(v => this.appInfo.version = v)
     getVersionCode().then(v => this.appInfo.build = v)
+  }
+
+  private _checkAppDate(storeDate) {
+    alert(`
+      local: ${new Date().toISOString()}
+      vs
+      distant: ${storeDate}
+    `)
+  }
+
+  private _checkAppVersion(storeVersion) {
+    alert(`
+      local: ${this.appInfo.version}
+      vs
+      distant: ${storeVersion}
+    `)
   }
 }

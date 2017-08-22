@@ -1,4 +1,4 @@
-import { StoreUpdateCommon } from "./store-update.common";
+import { StoreUpdateCommon } from './store-update.common';
 export declare class StoreUpdate extends StoreUpdateCommon {
     appInfo: {
         version: string;
@@ -8,4 +8,6 @@ export declare class StoreUpdate extends StoreUpdateCommon {
     readonly localVersionNumber: string;
     checkForUpdate(): void;
     private _initAppInfos();
+    private _checkAppDate(storeDate);
+    private _checkAppVersion(storeVersion);
 }
