@@ -6,6 +6,8 @@
 demo/app/*.js
 demo/*.d.ts
 demo/platforms
+demo/hooks
 demo/node_modules
 src/node_modules
+src/hooks
 *.DS_Store
