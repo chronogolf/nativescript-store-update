@@ -1,14 +1,11 @@
 import { StoreUpdateCommon } from './store-update.common'
 import { GooglePlayHelper } from './helpers/google-play.helper'
 import { VersionHelper } from './helpers/version.helper'
-import { getVersionCode, getVersionName } from 'nativescript-appversion'
+import { getVersionName } from 'nativescript-appversion'
 import { alert } from 'tns-core-modules/ui/dialogs'
 
 export class StoreUpdate extends StoreUpdateCommon {
-  appInfo: { version: string, build: string} = {
-    version: '',
-    build  : ''
-  }
+  private _localVersion: string = ''
 
   constructor() {
     super();
@@ -17,14 +14,14 @@ export class StoreUpdate extends StoreUpdateCommon {
   }
 
   get localVersionNumber(): string {
-    return `${this.appInfo.version}.${this.appInfo.build}`;
+    return this._localVersion;
   }
 
   checkForUpdate() {
     GooglePlayHelper.getAppInfos('com.bitstrips.imoji')
       .then(infos => {
         this._checkAppVersion({
-          local: this.appInfo.version,
+          local: this._localVersion,
           store: infos.version
         })
       })
@@ -32,16 +29,7 @@ export class StoreUpdate extends StoreUpdateCommon {
   }
 
   private _initAppInfos() {
-    getVersionName().then(v => this.appInfo.version = v)
-    getVersionCode().then(v => this.appInfo.build = v)
-  }
-
-  private _appWasUpdated(storeDate) {
-    alert(`
-      local: ${new Date().toISOString()}
-      vs
-      distant: ${storeDate}
-    `)
+    getVersionName().then(v => this._localVersion = v)
   }
 
   private _checkAppVersion(versions) {
