@@ -14,9 +14,12 @@ export class GooglePlayHelper {
 
 
   private static _parseResource(page) {
-    const version = GooglePlayConstants.VERSION_REGEX.exec(page)[1]
-    const date = GooglePlayConstants.DATE_REGEX.exec(page)[1]
-    return { version, date }
+    const infos: any = {}
+    Object.keys(GooglePlayConstants.REGEX)
+      .map(key => {
+        infos[key.toLowerCase()] = GooglePlayConstants.REGEX[key].exec(page)[1] || null
+      })
+    return infos
   }
 
   private static _handleNotFound(response) {
