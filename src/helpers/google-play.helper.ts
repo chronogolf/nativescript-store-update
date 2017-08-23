@@ -3,7 +3,7 @@ import { GooglePlayConstants } from '../constants/google-play'
 export class GooglePlayHelper {
   public static getAppInfos(bundleID) {
     return GooglePlayHelper._getAppPage(bundleID)
-      .then(GooglePlayHelper._handleNotFound)
+      .then(GooglePlayHelper._handleError)
       .then(GooglePlayHelper._convertHTMLToText)
       .then(GooglePlayHelper._parseResource)
   }
@@ -22,8 +22,8 @@ export class GooglePlayHelper {
     return infos
   }
 
-  private static _handleNotFound(response) {
-    if (response.status === 404) {
+  private static _handleError(response) {
+    if (response.status >= 400) {
       throw new Error(GooglePlayConstants.PLAY_STORE_PACKAGE_NOT_PUBLISHED_IDENTIFIER)
     }
     return response
