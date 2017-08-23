@@ -1,28 +1,75 @@
-import { StoreUpdateCommon } from "./store-update.common";
-// import * as application from "application";
-
-const PLAY_STORE_ROOT_WEB: string = "https://play.google.com/store/apps/details?id=";
-const PLAY_STORE_HTML_TAGS_TO_GET_RIGHT_POSITION: string = 'itemprop="softwareVersion"> ';
-const PLAY_STORE_HTML_TAGS_TO_REMOVE_USELESS_CONTENT: string = "  </div> </div>";
-const PLAY_STORE_PACKAGE_NOT_PUBLISHED_IDENTIFIER: string =
-  "We're sorry, the requested URL was not found on this server.";
+import { StoreUpdateCommon } from './store-update.common'
+import { GooglePlayHelper } from './helpers/google-play.helper'
+import { VersionHelper } from './helpers/version.helper'
+import { getVersionName } from 'nativescript-appversion'
+import { alert } from 'tns-core-modules/ui/dialogs'
 
 export class StoreUpdate extends StoreUpdateCommon {
-  // public versionNumber() {
-  //   var PackageManager = android.content.pm.PackageManager;
-  //   var pkg = application.android.context.getPackageManager().getPackageInfo(application.android.context.getPackageName(),
-  //     PackageManager.GET_META_DATA);
-  //   return pkg.versionName;
-  //   }
-  // public static isVersionDownloadableNewer(mActivity: Activity, versionDownloadable: string): boolean {
-  //     let versionInstalled: string = null;
-  //     try {
-  //       versionInstalled = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
-  //     } catch (PackageManager.NameNotFoundException ignored) { }
-  //     if (versionInstalled.equals(versionDownloadable)) { // If it is equal, no new version downloadable
-  //         return false;
-  //     } else {
-  //         return versionCompareNumerically(versionDownloadable, versionInstalled) > 0; // Return if the versionDownloadble is newer than the installed
-  //     }
-  // }
+  private _localVersion: string = ''
+
+  constructor() {
+    super();
+    this._initAppInfos()
+    this.checkForUpdate();
+  }
+
+  get localVersionNumber(): string {
+    return this._localVersion;
+  }
+
+  checkForUpdate() {
+    GooglePlayHelper.getAppInfos('com.bitstrips.imoji')
+      .then(infos => {
+        this._checkAppVersion({
+          local: this._localVersion,
+          store: infos.version
+        })
+      })
+      .catch(console.error)
+  }
+
+  private _initAppInfos() {
+    getVersionName().then(v => this._localVersion = v)
+  }
+
+  private _checkAppVersion(versions) {
+    if (VersionHelper.isMajorUpdate(versions.store, versions.local)) {
+      return this._showMajorUpdateAlert(versions)
+    }
+
+    if (VersionHelper.isMinorUpdate(versions.store, versions.local)) {
+      return this._showMinorUpdateAlert(versions)
+    }
+
+    if (VersionHelper.isPatchUpdate(versions.store, versions.local)) {
+      return this._showPatchUpdateAlert(versions)
+    }
+  }
+
+  private _showMajorUpdateAlert(versions) {
+    alert(`
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a major version update !
+  `)
+  }
+
+  private _showMinorUpdateAlert(versions) {
+    alert(`
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a minor version update !
+  `)
+  }
+
+  private _showPatchUpdateAlert(versions) {
+    alert(`
+    local: ${versions.local}
+    vs
+    store: ${versions.store}
+    This is a patch version update !
+  `)
+  }
 }
