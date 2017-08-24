@@ -8,6 +8,11 @@ demo/*.d.ts
 demo/platforms
 demo/hooks
 demo/node_modules
+demo-angular/app/*.js
+demo-angular/*.d.ts
+demo-angular/node_modules
+demo-angular/hooks
+demo-angular/platforms
 src/node_modules
 src/hooks
 *.DS_Store
