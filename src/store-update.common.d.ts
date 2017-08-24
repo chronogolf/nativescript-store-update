@@ -1,4 +1,6 @@
+import { IStoreUpdateConfig } from './interfaces';
 export declare class StoreUpdateCommon {
+    private static _instance;
     private _majorUpdateAlertType;
     private _minorUpdateAlertType;
     private _patchUpdateAlertType;
@@ -6,7 +8,7 @@ export declare class StoreUpdateCommon {
     private _notifyNbDaysAfterRelease;
     appId: string;
     countryCode: string;
-    constructor();
+    constructor(config: IStoreUpdateConfig);
     readonly majorUpdateAlertType: number;
     readonly minorUpdateAlertType: number;
     readonly patchUpdateAlertType: number;

@@ -1,4 +1,5 @@
 import { StoreUpdateCommon } from "./store-update.common";
+import { IStoreUpdateConfig } from './interfaces';
 export interface AppleStoreInfos {
     resultCount: number;
     results: AppleStoreResult[];
@@ -13,7 +14,7 @@ export interface AppleStoreResult {
 export declare class StoreUpdate extends StoreUpdateCommon {
     private ITUNES_BASE_URL;
     private BUNDLE_ID;
-    constructor();
+    constructor(config: IStoreUpdateConfig);
     readonly localVersionNumber: string;
     checkForUpdate(): void;
     private _parseResults(data);

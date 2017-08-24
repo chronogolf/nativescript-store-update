@@ -1,12 +1,13 @@
-import { StoreUpdateCommon } from "./store-update.common";
-
+import { StoreUpdateCommon } from './store-update.common';
+import { IStoreUpdateConfig } from './interfaces';
 export declare class StoreUpdate extends StoreUpdateCommon {
-  appId: string;
-  countryCode: string;
-  constructor();
-  readonly majorUpdateAlertType: number;
-  readonly minorUpdateAlertType: number;
-  readonly patchUpdateAlertType: number;
-  readonly revisionUpdateAlertType: number;
-  readonly notifyNbDaysAfterRelease: number;
+    private _localVersion;
+    constructor(config: IStoreUpdateConfig);
+    readonly localVersionNumber: string;
+    checkForUpdate(): void;
+    private _initAppInfos();
+    private _checkAppVersion(versions);
+    private _showMajorUpdateAlert(versions);
+    private _showMinorUpdateAlert(versions);
+    private _showPatchUpdateAlert(versions);
 }

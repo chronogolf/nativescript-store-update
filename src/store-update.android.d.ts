@@ -1,7 +1,8 @@
 import { StoreUpdateCommon } from './store-update.common';
+import { IStoreUpdateConfig } from './interfaces';
 export declare class StoreUpdate extends StoreUpdateCommon {
     private _localVersion;
-    constructor();
+    constructor(config: IStoreUpdateConfig);
     readonly localVersionNumber: string;
     checkForUpdate(): void;
     private _initAppInfos();

@@ -1,14 +1,15 @@
-import { StoreUpdateCommon } from './store-update.common'
-import { GooglePlayHelper } from './helpers/google-play.helper'
-import { VersionHelper } from './helpers/version.helper'
 import { getVersionName } from 'nativescript-appversion'
 import { alert } from 'tns-core-modules/ui/dialogs'
+
+import { StoreUpdateCommon } from './store-update.common'
+import { GooglePlayHelper, VersionHelper } from './helpers'
+import { IStoreUpdateConfig } from './interfaces'
 
 export class StoreUpdate extends StoreUpdateCommon {
   private _localVersion: string = ''
 
-  constructor() {
-    super();
+  constructor(config: IStoreUpdateConfig) {
+    super(config);
     this._initAppInfos()
     this.checkForUpdate();
   }

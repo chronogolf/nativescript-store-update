@@ -8,8 +8,9 @@ import * as moment from "moment";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { StoreUpdateCommon } from "./store-update.common";
-import { VersionHelper } from "./helpers/version.helper";
+import { VersionHelper } from "./helpers";
 import { LocalesConstant, AlertTypesConstant, UpdateTypesConstant } from "./constants";
+import { IStoreUpdateConfig } from './interfaces'
 
 declare const NSBundle: any;
 declare const UIDevice: any;
@@ -38,8 +39,8 @@ export class StoreUpdate extends StoreUpdateCommon {
 
   // lastVersionCheckPerformedOnDate: date
 
-  constructor() {
-    super();
+  constructor(config: IStoreUpdateConfig) {
+    super(config);
     this.checkForUpdate();
   }
 
