@@ -1,76 +1,62 @@
-import { getVersionName } from 'nativescript-appversion'
-import { alert } from 'tns-core-modules/ui/dialogs'
+import * as utils from "tns-core-modules/utils/utils";
 
-import { StoreUpdateCommon } from './store-update.common'
-import { GooglePlayHelper, VersionHelper } from './helpers'
+import { StoreUpdateCommon } from "./store-update.common";
+import { GooglePlayHelper } from "./helpers";
 import { IStoreUpdateConfig } from './interfaces'
 
+export * from "./constants";
+
+declare const android: any;
+
+export interface GoogleStoreResult {
+  version: string;
+  minimumOsVersion: string;
+  currentVersionReleaseDate: string;
+}
+
 export class StoreUpdate extends StoreUpdateCommon {
-  private _localVersion: string = ''
+  private static _instance: StoreUpdate;
 
   constructor(config: IStoreUpdateConfig) {
+    if (StoreUpdate._instance instanceof StoreUpdate) {
+      return StoreUpdate._instance;
+    }
     super(config);
-    this._initAppInfos()
-    this.checkForUpdate();
-  }
-
-  get localVersionNumber(): string {
-    return this._localVersion;
+    StoreUpdate._instance = this;
   }
 
   checkForUpdate() {
-    GooglePlayHelper.getAppInfos('com.bitstrips.imoji')
-      .then(infos => {
-        this._checkAppVersion({
-          local: this._localVersion,
-          store: infos.version
-        })
+    console.log('ANDROID CHECK!')
+    GooglePlayHelper.getAppInfos(this.bundleId)
+      .then((infos: GoogleStoreResult) => {
+        this._parseResults(infos)
       })
-      .catch(console.error)
+      .catch(console.error);
   }
 
-  private _initAppInfos() {
-    getVersionName().then(v => this._localVersion = v)
+  /*
+   *  Private
+   */
+
+  private _parseResults(result: any) {
+    const data = {
+      version                  : result.version,
+      currentVersionReleaseDate: result.date,
+      minimumOsVersion         : result.os,
+      systemVersion            : android.os.Build.VERSION.RELEASE
+    };
+    if (this._isEligibleForUpdate(data)) this._triggerAlertForUpdate(result.version);
   }
 
-  private _checkAppVersion(versions) {
-    if (VersionHelper.isMajorUpdate(versions.store, versions.local)) {
-      return this._showMajorUpdateAlert(versions)
-    }
-
-    if (VersionHelper.isMinorUpdate(versions.store, versions.local)) {
-      return this._showMinorUpdateAlert(versions)
-    }
-
-    if (VersionHelper.isPatchUpdate(versions.store, versions.local)) {
-      return this._showPatchUpdateAlert(versions)
-    }
+  private _triggerAlertForUpdate(version: string) {
+    this._showAlertForUpdate(version).then((confirmed: boolean) => {
+      if (confirmed) this._launchPlayStore();
+      else this._setVersionAsSkipped(version);
+    });
   }
 
-  private _showMajorUpdateAlert(versions) {
-    alert(`
-    local: ${versions.local}
-    vs
-    store: ${versions.store}
-    This is a major version update !
-  `)
-  }
-
-  private _showMinorUpdateAlert(versions) {
-    alert(`
-    local: ${versions.local}
-    vs
-    store: ${versions.store}
-    This is a minor version update !
-  `)
-  }
-
-  private _showPatchUpdateAlert(versions) {
-    alert(`
-    local: ${versions.local}
-    vs
-    store: ${versions.store}
-    This is a patch version update !
-  `)
+  private _launchPlayStore() {
+    const storeUrl = `market://details?id=${this.bundleId}`;
+    utils.openUrl(storeUrl);
   }
 }

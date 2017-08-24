@@ -13,11 +13,11 @@ export class StoreUpdateConfig implements IStoreUpdateConfig {
   revisionUpdateAlertType : number
   notifyNbDaysAfterRelease: number
 
-  constructor(config?: StoreUpdateConfig) {
-    this.majorUpdateAlertType     = config.majorUpdateAlertType     || AlertTypesConstant.FORCE;
-    this.minorUpdateAlertType     = config.minorUpdateAlertType     || AlertTypesConstant.OPTION;
-    this.patchUpdateAlertType     = config.patchUpdateAlertType     || AlertTypesConstant.NONE;
-    this.revisionUpdateAlertType  = config.revisionUpdateAlertType  || AlertTypesConstant.NONE;
-    this.notifyNbDaysAfterRelease = config.notifyNbDaysAfterRelease || 3;
+  constructor(config?: IStoreUpdateConfig) {
+    this.majorUpdateAlertType     = config.majorUpdateAlertType;
+    this.minorUpdateAlertType     = config.minorUpdateAlertType;
+    this.patchUpdateAlertType     = config.patchUpdateAlertType;
+    this.revisionUpdateAlertType  = config.revisionUpdateAlertType;
+    this.notifyNbDaysAfterRelease = config.notifyNbDaysAfterRelease;
   }
 }

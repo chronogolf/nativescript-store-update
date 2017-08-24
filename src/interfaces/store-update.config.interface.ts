@@ -4,4 +4,5 @@ export interface IStoreUpdateConfig {
   patchUpdateAlertType    ?: number
   revisionUpdateAlertType ?: number
   notifyNbDaysAfterRelease?: number
+  countryCode             ?: string
 }

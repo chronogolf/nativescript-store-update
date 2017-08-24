@@ -1,5 +1,6 @@
 import { StoreUpdateCommon } from "./store-update.common";
-import { IStoreUpdateConfig } from './interfaces';
+import { IStoreUpdateConfig } from "./interfaces";
+export * from "./constants";
 export interface AppleStoreInfos {
     resultCount: number;
     results: AppleStoreResult[];
@@ -12,22 +13,11 @@ export interface AppleStoreResult {
     currentVersionReleaseDate: string;
 }
 export declare class StoreUpdate extends StoreUpdateCommon {
-    private ITUNES_BASE_URL;
-    private BUNDLE_ID;
+    private static _instance;
     constructor(config: IStoreUpdateConfig);
-    readonly localVersionNumber: string;
     checkForUpdate(): void;
     private _parseResults(data);
-    private _isUpdateCompatibleWithDeviceOS(result);
-    private _hasBeenReleasedLongerThanDelay(result);
-    private _isAppStoreVersionNewer(result);
-    private _setupNotificationForUpdate(result);
-    private _showAlertIfCurrentAppStoreVersionNotSkipped(result);
-    private _isCurrentVersionSkipped(currentAppStoreVersion);
-    private _showAlertForAppStoreVersion(result);
-    private _getUpdateTypeForVersion(currentAppStoreVersion);
-    private _getAlertTypeForVersion(currentAppStoreVersion);
-    private _buildDialogOptions({skippable}?);
-    private _launchAppStore(appId);
+    private _triggerAlertForUpdate(version);
+    private _launchAppStore();
     private _getItunesLookupUrl();
 }

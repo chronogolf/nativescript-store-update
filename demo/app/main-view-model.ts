@@ -4,6 +4,5 @@ export class HelloWorldModel extends Observable {
 
   constructor() {
     super();
-    // console.log(this.storeUpdate.localVersionNumber);
   }
 }
