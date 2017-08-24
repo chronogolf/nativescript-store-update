@@ -8,15 +8,7 @@
   },
   "description": "Nativescript hello-world-ts project template",
   "license": "Apache-2.0",
-  "keywords": [
-    "telerik",
-    "mobile",
-    "nativescript",
-    "{N}",
-    "tns",
-    "appbuilder",
-    "template"
-  ],
+  "keywords": ["telerik", "mobile", "nativescript", "{N}", "tns", "appbuilder", "template"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/NativeScript/template-hello-world-ts.git"

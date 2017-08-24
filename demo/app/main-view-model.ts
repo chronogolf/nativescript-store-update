@@ -1,5 +1,5 @@
 import { Observable } from "tns-core-modules/data/observable";
-import { StoreUpdate } from "nativescript-store-update";
+import { StoreUpdate, AlertTypesConstant } from "nativescript-store-update";
 
 export class HelloWorldModel extends Observable {
   private storeUpdate: StoreUpdate;
@@ -9,6 +9,8 @@ export class HelloWorldModel extends Observable {
 
     this.storeUpdate = new StoreUpdate();
 
-    // console.log(this.storeUpdate.localVersionNumber);
+    this.storeUpdate.notifyNbDaysAfterRelease = 10;
+    this.storeUpdate.majorUpdateAlertType = AlertTypesConstant.OPTION;
+    this.storeUpdate.checkForUpdate();
   }
 }

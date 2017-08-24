@@ -1,12 +1,16 @@
 import { StoreUpdateCommon } from "./store-update.common";
 
+export * from "./constants";
+
 export declare class StoreUpdate extends StoreUpdateCommon {
-  appId: string;
   countryCode: string;
+  majorUpdateAlertType: number;
+  minorUpdateAlertType: number;
+  patchUpdateAlertType: number;
+  revisionUpdateAlertType: number;
+  notifyNbDaysAfterRelease: number;
   constructor();
-  readonly majorUpdateAlertType: number;
-  readonly minorUpdateAlertType: number;
-  readonly patchUpdateAlertType: number;
-  readonly revisionUpdateAlertType: number;
-  readonly notifyNbDaysAfterRelease: number;
+  checkForUpdate(): void;
+  readonly appId: string;
+  readonly localVersionNumber: string;
 }
