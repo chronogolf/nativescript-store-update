@@ -1,11 +1,7 @@
 var http = require("http");
 var utils = require("utils/utils");
 
-import { confirm } from "tns-core-modules/ui/dialogs";
-
 import { StoreUpdateCommon } from "./store-update.common";
-import { VersionHelper } from "./helpers/version.helper";
-import { AlertTypesConstant } from "./constants";
 
 declare const UIDevice: any;
 
@@ -31,7 +27,6 @@ export interface AppleStoreResult {
 export * from "./constants";
 
 const ITUNES_BASE_URL: string = "https://itunes.apple.com";
-const BUNDLE_ID: string = "com.chronogolf.booking.chronogolf";
 
 export class StoreUpdate extends StoreUpdateCommon {
   constructor() {
@@ -55,10 +50,7 @@ export class StoreUpdate extends StoreUpdateCommon {
         }
         this._parseResults(result.content.toJSON());
       })
-      .catch(err => {
-        console.warn("Failed Request");
-        console.dir(err);
-      });
+      .catch(e => console.dir(e));
   }
 
   /*
@@ -68,45 +60,23 @@ export class StoreUpdate extends StoreUpdateCommon {
   private _parseResults(data: AppleStoreInfos) {
     if (data.resultCount === 0) return;
     const result = Object.assign(data.results[0], { systemVersion: UIDevice.currentDevice.systemVersion });
-    if (this._isEligibleForUpdate(result)) this._showAlertForUpdate(result);
+    if (this._isEligibleForUpdate(result)) this._triggerAlertForUpdate(result.version);
   }
 
-  private _showAlertForUpdate(result: AppleStoreResult) {
-    // Show Appropriate Alert Dialog
-    const alertType = this._getAlertTypeForVersion("2.1.3"); // result.version
-    switch (alertType) {
-      case AlertTypesConstant.FORCE: {
-        const options = this._buildDialogOptions({ skippable: false });
-        confirm(options).then((confirmed: boolean) => {
-          if (confirmed) this._launchAppStore(result.trackId);
-        });
-        break;
-      }
-      case AlertTypesConstant.OPTION: {
-        const options = this._buildDialogOptions();
-        confirm(options).then((confirmed: boolean) => {
-          if (confirmed) this._launchAppStore(result.trackId);
-          this._setVersionAsSkipped(result.version);
-        });
-        break;
-      }
-      default:
-        break;
-    }
+  private _triggerAlertForUpdate(version: string) {
+    this._showAlertForUpdate(version).then((confirmed: boolean) => {
+      if (confirmed) this._launchAppStore();
+      this._setVersionAsSkipped(version);
+    });
   }
 
-  private _launchAppStore(appId: number) {
-    const appStoreUrl = `${ITUNES_BASE_URL}/app?id=${appId}`;
-
-    // Web Path
-    utils.openUrl(appStoreUrl);
-
+  private _launchAppStore() {
     // App Path
-    // utils.openUrl(NSURL.URLWithString(`itms-apps://itunes.com/app/${this.bundleId}`))
+    utils.openUrl(NSURL.URLWithString(`itms-apps://itunes.com/app/${this.bundleId}`));
   }
 
   private _getItunesLookupUrl(): string {
-    let url = `${ITUNES_BASE_URL}/lookup?bundleId=${BUNDLE_ID}`;
+    let url = `${ITUNES_BASE_URL}/lookup?bundleId=${this.bundleId}`;
     if (this.countryCode) {
       url = `${url}&country=${this.countryCode}`;
     }

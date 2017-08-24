@@ -9,7 +9,7 @@ export class HelloWorldModel extends Observable {
 
     this.storeUpdate = new StoreUpdate();
 
-    this.storeUpdate.notifyNbDaysAfterRelease = 10;
+    this.storeUpdate.notifyNbDaysAfterRelease = 1;
     this.storeUpdate.majorUpdateAlertType = AlertTypesConstant.OPTION;
     this.storeUpdate.checkForUpdate();
   }

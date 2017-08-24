@@ -10,4 +10,6 @@ export declare class StoreUpdate extends StoreUpdateCommon {
     init(initParams: any): void;
     checkForUpdate(): void;
     private _parseResults(result);
+    private _triggerAlertForUpdate(version);
+    private _launchPlayStore();
 }

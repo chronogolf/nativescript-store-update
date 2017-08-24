@@ -1,4 +1,12 @@
 import { ConfirmOptions } from "tns-core-modules/ui/dialogs";
+export interface storeUpdateParams {
+    majorUpdateAlertType: number;
+    minorUpdateAlertType: number;
+    patchUpdateAlertType: number;
+    revisionUpdateAlertType: number;
+    notifyNbDaysAfterRelease: number;
+    countryCode: string;
+}
 export declare class StoreUpdateCommon {
     majorUpdateAlertType: number;
     minorUpdateAlertType: number;
@@ -7,7 +15,7 @@ export declare class StoreUpdateCommon {
     notifyNbDaysAfterRelease: number;
     countryCode: string;
     constructor();
-    init(initParams: any): void;
+    init(initParams: storeUpdateParams): void;
     readonly bundleId: string;
     readonly localVersionNumber: string;
     protected _isEligibleForUpdate({version, currentVersionReleaseDate, minimumOsVersion, systemVersion}: {
@@ -21,7 +29,8 @@ export declare class StoreUpdateCommon {
     protected _buildDialogOptions({skippable}?: {
         skippable?: boolean;
     }): ConfirmOptions;
-    private _isAppStoreVersionNewer(versionsInStore);
+    protected _showAlertForUpdate(version: string): Promise<boolean>;
+    private _isAppStoreVersionNewer(storeVersion);
     private _isCurrentVersionSkipped(currentAppStoreVersion);
     private _hasBeenReleasedLongerThanDelay(releaseDate);
     private _isUpdateCompatibleWithDeviceOS(deviceVersion, minimumRequiredOSVersion);

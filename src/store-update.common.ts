@@ -6,13 +6,24 @@ import * as app from "tns-core-modules/application";
 import * as moment from "moment";
 import * as appSettings from "tns-core-modules/application-settings";
 
-import { ConfirmOptions } from "tns-core-modules/ui/dialogs";
+import { confirm, ConfirmOptions } from "tns-core-modules/ui/dialogs";
 import { getVersionNameSync, getAppIdSync } from "nativescript-appversion";
 
 import { VersionHelper } from "./helpers/version.helper";
 import { AlertTypesConstant, UpdateTypesConstant } from "./constants";
 
 declare var global: any;
+
+export interface storeUpdateParams {
+  majorUpdateAlertType: number;
+  minorUpdateAlertType: number;
+  patchUpdateAlertType: number;
+  revisionUpdateAlertType: number;
+  notifyNbDaysAfterRelease: number;
+  countryCode: string;
+}
+
+const LAST_VERSION_SKIPPED_KEY = "lastVersionSkipped";
 
 export class StoreUpdateCommon {
   majorUpdateAlertType: number = AlertTypesConstant.FORCE;
@@ -26,7 +37,7 @@ export class StoreUpdateCommon {
 
   constructor() {}
 
-  init(initParams) {}
+  init(initParams: storeUpdateParams) {}
 
   /*
    *  Public
@@ -53,7 +64,7 @@ export class StoreUpdateCommon {
   }
 
   protected _setVersionAsSkipped(version: string) {
-    appSettings.setString("lastVersionSkipped", version);
+    appSettings.setString(LAST_VERSION_SKIPPED_KEY, version);
   }
 
   protected _getAlertTypeForVersion(currentAppStoreVersion: string): number {
@@ -97,26 +108,40 @@ export class StoreUpdateCommon {
     return options;
   }
 
+  protected _showAlertForUpdate(version: string): Promise<boolean> {
+    const alertType = this._getAlertTypeForVersion(version);
+    switch (alertType) {
+      case AlertTypesConstant.FORCE: {
+        const options: ConfirmOptions = this._buildDialogOptions({ skippable: false });
+        return confirm(options);
+      }
+      case AlertTypesConstant.OPTION: {
+        const options: ConfirmOptions = this._buildDialogOptions();
+        return confirm(options);
+      }
+      default:
+        return Promise.reject(null);
+    }
+  }
+
   /*
    *  Private
    */
 
-  private _isAppStoreVersionNewer(versionsInStore: string): boolean {
-    if (versionsInStore === null) return false;
-
-    // return VersionHelper.isHigher(versionsInStore, this.localVersionNumber())
-    return true; // Debug Purpose
+  private _isAppStoreVersionNewer(storeVersion: string): boolean {
+    if (storeVersion === null) return false;
+    return VersionHelper.isHigher(storeVersion, this.localVersionNumber);
   }
 
   private _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
-    const lastVersionSkipped = appSettings.getString("lastVersionSkipped");
+    const lastVersionSkipped = appSettings.getString(LAST_VERSION_SKIPPED_KEY);
     return currentAppStoreVersion === lastVersionSkipped;
   }
 
   private _hasBeenReleasedLongerThanDelay(releaseDate: string): boolean {
     if (releaseDate === null) return false;
 
-    const daysSinceRelease = moment().diff(moment(releaseDate), "days");
+    const daysSinceRelease = moment().diff(moment(new Date(releaseDate)), "days");
     if (daysSinceRelease < this.notifyNbDaysAfterRelease) {
       console.log(
         `Your app has been released for ${daysSinceRelease} days, but we cannot prompt the user until ${this
@@ -129,10 +154,10 @@ export class StoreUpdateCommon {
 
   private _isUpdateCompatibleWithDeviceOS(deviceVersion: string, minimumRequiredOSVersion: string): boolean {
     if (minimumRequiredOSVersion === null) return true;
-    if (!VersionHelper.isEqualOrHigher(deviceVersion, minimumRequiredOSVersion)) {
-      console.log(`Device is incompatible with installed version of iOS.`);
-    }
-    return VersionHelper.isEqualOrHigher(deviceVersion, minimumRequiredOSVersion);
+
+    const isCompatible = VersionHelper.isEqualOrHigher(deviceVersion, minimumRequiredOSVersion);
+    if (!isCompatible) console.log(`Device is incompatible with installed version of iOS.`);
+    return isCompatible;
   }
 
   private _getUpdateTypeForVersion(currentAppStoreVersion: string): number {

@@ -15,7 +15,8 @@ export class GooglePlayHelper {
   private static _parseResource(page) {
     const infos: any = {};
     Object.keys(GooglePlayConstants.REGEX).map(key => {
-      infos[key.toLowerCase()] = GooglePlayConstants.REGEX[key].exec(page)[1] || null;
+      const regEx = GooglePlayConstants.REGEX[key].exec(page);
+      infos[key.toLowerCase()] = regEx ? regEx[1] : null;
     });
     return infos;
   }

@@ -16,7 +16,7 @@ export declare class StoreUpdate extends StoreUpdateCommon {
     init(initParams: any): void;
     checkForUpdate(): void;
     private _parseResults(data);
-    private _showAlertForUpdate(result);
-    private _launchAppStore(appId);
+    private _triggerAlertForUpdate(version);
+    private _launchAppStore();
     private _getItunesLookupUrl();
 }
