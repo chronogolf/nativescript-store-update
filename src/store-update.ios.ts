@@ -66,7 +66,7 @@ export class StoreUpdate extends StoreUpdateCommon {
   private _triggerAlertForUpdate(version: string) {
     this._showAlertForUpdate(version).then((confirmed: boolean) => {
       if (confirmed) this._launchAppStore();
-      this._setVersionAsSkipped(version);
+      else this._setVersionAsSkipped(version);
     });
   }
 

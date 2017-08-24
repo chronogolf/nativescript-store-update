@@ -39,14 +39,13 @@ export class StoreUpdate extends StoreUpdateCommon {
       minimumOsVersion: result.os,
       systemVersion: android.os.Build.VERSION.RELEASE
     };
-    this._triggerAlertForUpdate(result.version);
     if (this._isEligibleForUpdate(data)) this._triggerAlertForUpdate(result.version);
   }
 
   private _triggerAlertForUpdate(version: string) {
     this._showAlertForUpdate(version).then((confirmed: boolean) => {
       if (confirmed) this._launchPlayStore();
-      this._setVersionAsSkipped(version);
+      else this._setVersionAsSkipped(version);
     });
   }
 
