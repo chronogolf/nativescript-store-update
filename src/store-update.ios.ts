@@ -38,6 +38,10 @@ export class StoreUpdate extends StoreUpdateCommon {
     super();
   }
 
+  init(initParams: any) {
+    super.init(initParams);
+  }
+
   public checkForUpdate() {
     http
       .request({

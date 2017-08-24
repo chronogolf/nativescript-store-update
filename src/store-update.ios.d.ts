@@ -13,6 +13,7 @@ export interface AppleStoreResult {
 export * from "./constants";
 export declare class StoreUpdate extends StoreUpdateCommon {
     constructor();
+    init(initParams: any): void;
     checkForUpdate(): void;
     private _parseResults(data);
     private _showAlertForUpdate(result);

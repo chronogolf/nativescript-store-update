@@ -7,6 +7,7 @@ export declare class StoreUpdateCommon {
     notifyNbDaysAfterRelease: number;
     countryCode: string;
     constructor();
+    init(initParams: any): void;
     readonly bundleId: string;
     readonly localVersionNumber: string;
     protected _isEligibleForUpdate({version, currentVersionReleaseDate, minimumOsVersion, systemVersion}: {

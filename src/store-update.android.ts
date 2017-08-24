@@ -16,6 +16,10 @@ export class StoreUpdate extends StoreUpdateCommon {
     super();
   }
 
+  init(initParams: any) {
+    super.init(initParams);
+  }
+
   checkForUpdate() {
     GooglePlayHelper.getAppInfos(this.bundleId)
       .then((infos: GoogleStoreResult) => this._parseResults(infos))

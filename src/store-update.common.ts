@@ -26,6 +26,8 @@ export class StoreUpdateCommon {
 
   constructor() {}
 
+  init(initParams) {}
+
   /*
    *  Public
    */

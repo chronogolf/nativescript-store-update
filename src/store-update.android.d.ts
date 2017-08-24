@@ -7,6 +7,7 @@ export interface GoogleStoreResult {
 }
 export declare class StoreUpdate extends StoreUpdateCommon {
     constructor();
+    init(initParams: any): void;
     checkForUpdate(): void;
     private _parseResults(result);
 }
