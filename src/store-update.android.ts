@@ -26,7 +26,6 @@ export class StoreUpdate extends StoreUpdateCommon {
   }
 
   checkForUpdate() {
-    console.log('ANDROID CHECK!')
     GooglePlayHelper.getAppInfos(this.bundleId)
       .then((infos: GoogleStoreResult) => {
         this._parseResults(infos)

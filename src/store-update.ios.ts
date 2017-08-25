@@ -39,7 +39,6 @@ export class StoreUpdate extends StoreUpdateCommon {
   }
 
   public checkForUpdate() {
-    console.log('IOS CHECK!')
     http
       .request({
         method: "GET",

@@ -46,7 +46,6 @@ export class StoreUpdateCommon {
 
     // Resumed is called both at launch and resume of the app
     app.on(app.resumeEvent, () => {
-      console.log('App started or resumed');
       this.checkForUpdate();
     })
   }
