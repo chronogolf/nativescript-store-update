@@ -1,26 +1,11 @@
 import { StoreUpdateCommon } from "./store-update.common";
-import { IStoreUpdateConfig } from './interfaces';
 export * from "./constants";
-export interface AppleStoreInfos {
-  resultCount: number;
-  results: AppleStoreResult[];
-}
-export interface AppleStoreResult {
-  bundleId: string;
-  trackId: number;
-  version: string;
-  minimumOsVersion: string;
-  currentVersionReleaseDate: string;
-}
-export interface GoogleStoreResult {
-    version: string;
-    minimumOsVersion: string;
-    currentVersionReleaseDate: string;
-}
 export declare class StoreUpdate extends StoreUpdateCommon {
-    constructor(config: IStoreUpdateConfig);
-    checkForUpdate(): void;
-    private _extendResults(result);
-    private _triggerAlertIfEligible(result);
-    protected _openStore(): void;
+    private static _checkHasTimeouted;
+    private static _timeoutChecker;
+    private static _looperChecker;
+    static checkForUpdate(): void;
+    private static _extendResults(result);
+    private static _triggerAlertIfEligible(result);
+    protected static _openStore(): void;
 }
