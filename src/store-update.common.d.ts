@@ -7,9 +7,8 @@ export declare class StoreUpdateCommon {
     private static _patchUpdateAlertType;
     private static _revisionUpdateAlertType;
     private static _notifyNbDaysAfterRelease;
-    protected static _countryCode: string;
+    protected static _countryCode: any;
     static init(config: IStoreUpdateConfig): void;
-    static checkForUpdate(): void;
     static getBundleId(): string;
     static getLocalVersionNumber(): string;
     protected static _isEligibleForUpdate({version, currentVersionReleaseDate, minimumOsVersion, systemVersion}: {

@@ -24,7 +24,11 @@ export class StoreUpdateCommon {
   private static _revisionUpdateAlertType;
   private static _notifyNbDaysAfterRelease;
 
-  protected static _countryCode  : string = 'en';
+  protected static _countryCode;
+
+  /*
+   *  Public
+   */
 
   public static init(config: IStoreUpdateConfig) {
     if (this.instatiated) return
@@ -38,18 +42,11 @@ export class StoreUpdateCommon {
     this._countryCode              = conf.countryCode;
   }
 
-  /*
-   *  Public
-   */
-
-  // Overwritten by platform versions
-  static checkForUpdate() {}
-
-  static getBundleId(): string {
+  public static getBundleId(): string {
     return getAppIdSync();
   }
 
-  static getLocalVersionNumber(): string {
+  public static getLocalVersionNumber(): string {
     return getVersionNameSync();
   }
 
@@ -65,7 +62,7 @@ export class StoreUpdateCommon {
     return true;
   }
 
-  // Will be overriden
+  // Overriden by platforms
   protected static _openStore() {}
 
   protected static _setVersionAsSkipped(version: string) {

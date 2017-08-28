@@ -41,7 +41,7 @@ In your `main.ts` or `app.ts` file, before app start, call `StoreUpdate.init` wi
 | **majorUpdateAlertType** | NONE | Type of alert for major version change |
 | **revisionUpdateAlertType** | NONE | Type of alert for revision version change |
 | **notifyNbDaysAfterRelease** | `1` | Number of day from update to wait before displaying alert |
-| **countryCode** | `undefined` | country to check the app for on the store |
+| **countryCode** | `en` | country to check the app for on the store |
 
 ### Alert types
 | Key | Value | Description |

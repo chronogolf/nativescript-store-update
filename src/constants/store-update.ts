@@ -8,5 +8,6 @@ export const StoreUpdateConstants = {
     patchUpdateAlertType    : AlertTypesConstants.NONE,
     revisionUpdateAlertType : AlertTypesConstants.NONE,
     notifyNbDaysAfterRelease: 1,
+    countryCode             : 'en'
   }
 }
