@@ -1,4 +1,4 @@
-export declare const LocalesConstant: {
+export declare const LocalesConstants: {
     English: string;
     French: string;
 };

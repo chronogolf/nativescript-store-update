@@ -1,5 +1,5 @@
 /// i18n/l10n constants
-export const LocalesConstant = {
+export const LocalesConstants = {
   English: "en",
   French: "fr"
 };

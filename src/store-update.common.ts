@@ -9,7 +9,7 @@ import * as appSettings from "tns-core-modules/application-settings";
 import { confirm, ConfirmOptions } from "tns-core-modules/ui/dialogs";
 import { getVersionNameSync, getAppIdSync } from "nativescript-appversion";
 
-import { UpdateTypesConstant, AlertTypesConstant, StoreUpdateConstants } from "./constants";
+import { UpdateTypesConstants, AlertTypesConstants, StoreUpdateConstants } from "./constants";
 import { VersionHelper } from "./helpers";
 import { IStoreUpdateConfig } from './interfaces'
 
@@ -80,23 +80,23 @@ export class StoreUpdateCommon {
   }
 
   protected static _getAlertTypeForVersion(currentAppStoreVersion: string): number {
-    let alertType = AlertTypesConstant.OPTION;
+    let alertType = AlertTypesConstants.OPTION;
 
     const updateType = this._getUpdateTypeForVersion(currentAppStoreVersion);
     switch (updateType) {
-      case UpdateTypesConstant.MAJOR: {
+      case UpdateTypesConstants.MAJOR: {
         alertType = this._majorUpdateAlertType;
         break;
       }
-      case UpdateTypesConstant.MINOR: {
+      case UpdateTypesConstants.MINOR: {
         alertType = this._minorUpdateAlertType;
         break;
       }
-      case UpdateTypesConstant.PATCH: {
+      case UpdateTypesConstants.PATCH: {
         alertType = this._patchUpdateAlertType;
         break;
       }
-      case UpdateTypesConstant.REVISION: {
+      case UpdateTypesConstants.REVISION: {
         alertType = this._revisionUpdateAlertType;
         break;
       }
@@ -123,11 +123,11 @@ export class StoreUpdateCommon {
   protected static _showAlertForUpdate(version: string): Promise<boolean> {
     const alertType = this._getAlertTypeForVersion(version);
     switch (alertType) {
-      case AlertTypesConstant.FORCE: {
+      case AlertTypesConstants.FORCE: {
         const options: ConfirmOptions = this._buildDialogOptions({ skippable: false });
         return confirm(options);
       }
-      case AlertTypesConstant.OPTION: {
+      case AlertTypesConstants.OPTION: {
         const options: ConfirmOptions = this._buildDialogOptions();
         return confirm(options);
       }
@@ -174,14 +174,14 @@ export class StoreUpdateCommon {
 
   private static _getUpdateTypeForVersion(currentAppStoreVersion: string): number {
     const localVersion = this.getLocalVersionNumber()
-    if (VersionHelper.isMajorUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstant.MAJOR;
+    if (VersionHelper.isMajorUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstants.MAJOR;
 
-    if (VersionHelper.isMinorUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstant.MINOR;
+    if (VersionHelper.isMinorUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstants.MINOR;
 
-    if (VersionHelper.isPatchUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstant.PATCH;
+    if (VersionHelper.isPatchUpdate(currentAppStoreVersion, localVersion)) return UpdateTypesConstants.PATCH;
 
     if (VersionHelper.isRevisionUpdate(currentAppStoreVersion, localVersion))
-      return UpdateTypesConstant.REVISION;
+      return UpdateTypesConstants.REVISION;
 
     return -1;
   }

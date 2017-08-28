@@ -1,12 +1,12 @@
-import { AlertTypesConstant } from "./";
+import { AlertTypesConstants } from "./";
 
 export const StoreUpdateConstants = {
   LAST_VERSION_SKIPPED_KEY: "lastVersionSkipped",
   DEFAULT_CONFIG: {
-    majorUpdateAlertType    : AlertTypesConstant.FORCE,
-    minorUpdateAlertType    : AlertTypesConstant.OPTION,
-    patchUpdateAlertType    : AlertTypesConstant.NONE,
-    revisionUpdateAlertType : AlertTypesConstant.NONE,
+    majorUpdateAlertType    : AlertTypesConstants.FORCE,
+    minorUpdateAlertType    : AlertTypesConstants.OPTION,
+    patchUpdateAlertType    : AlertTypesConstants.NONE,
+    revisionUpdateAlertType : AlertTypesConstants.NONE,
     notifyNbDaysAfterRelease: 1,
   }
 }
