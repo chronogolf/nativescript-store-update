@@ -1,41 +1,34 @@
 import { ConfirmOptions } from "tns-core-modules/ui/dialogs";
 import { IStoreUpdateConfig } from './interfaces';
-export interface storeUpdateParams {
-    majorUpdateAlertType: number;
-    minorUpdateAlertType: number;
-    patchUpdateAlertType: number;
-    revisionUpdateAlertType: number;
-    notifyNbDaysAfterRelease: number;
-    countryCode: string;
-}
 export declare class StoreUpdateCommon {
-    private _majorUpdateAlertType;
-    private _minorUpdateAlertType;
-    private _patchUpdateAlertType;
-    private _revisionUpdateAlertType;
-    private _notifyNbDaysAfterRelease;
-    protected _countryCode: string;
-    constructor(config: IStoreUpdateConfig);
-    checkForUpdate(): void;
-    readonly bundleId: string;
-    readonly localVersionNumber: string;
-    protected _isEligibleForUpdate({version, currentVersionReleaseDate, minimumOsVersion, systemVersion}: {
+    static instatiated: boolean;
+    private static _majorUpdateAlertType;
+    private static _minorUpdateAlertType;
+    private static _patchUpdateAlertType;
+    private static _revisionUpdateAlertType;
+    private static _notifyNbDaysAfterRelease;
+    protected static _countryCode: string;
+    static init(config: IStoreUpdateConfig): void;
+    static checkForUpdate(): void;
+    static getBundleId(): string;
+    static getLocalVersionNumber(): string;
+    protected static _isEligibleForUpdate({version, currentVersionReleaseDate, minimumOsVersion, systemVersion}: {
         version: any;
         currentVersionReleaseDate: any;
         minimumOsVersion: any;
         systemVersion: any;
     }): boolean;
-    protected _openStore(): void;
-    protected _setVersionAsSkipped(version: string): void;
-    protected _triggerAlertForUpdate(version: string): void;
-    protected _getAlertTypeForVersion(currentAppStoreVersion: string): number;
-    protected _buildDialogOptions({skippable}?: {
+    protected static _openStore(): void;
+    protected static _setVersionAsSkipped(version: string): void;
+    protected static _triggerAlertForUpdate(version: string): void;
+    protected static _getAlertTypeForVersion(currentAppStoreVersion: string): number;
+    protected static _buildDialogOptions({skippable}?: {
         skippable?: boolean;
     }): ConfirmOptions;
-    protected _showAlertForUpdate(version: string): Promise<boolean>;
-    private _isAppStoreVersionNewer(storeVersion);
-    private _isCurrentVersionSkipped(currentAppStoreVersion);
-    private _hasBeenReleasedLongerThanDelay(releaseDate);
-    private _isUpdateCompatibleWithDeviceOS(deviceVersion, minimumRequiredOSVersion);
-    private _getUpdateTypeForVersion(currentAppStoreVersion);
+    protected static _showAlertForUpdate(version: string): Promise<boolean>;
+    private static _isAppStoreVersionNewer(storeVersion);
+    private static _isCurrentVersionSkipped(currentAppStoreVersion);
+    private static _hasBeenReleasedLongerThanDelay(releaseDate);
+    private static _isUpdateCompatibleWithDeviceOS(deviceVersion, minimumRequiredOSVersion);
+    private static _getUpdateTypeForVersion(currentAppStoreVersion);
 }

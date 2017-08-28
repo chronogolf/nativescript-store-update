@@ -1,11 +1,11 @@
 import { StoreUpdateCommon } from "./store-update.common";
-import { IStoreUpdateConfig } from './interfaces';
 export * from "./constants";
 export declare class StoreUpdate extends StoreUpdateCommon {
-    private static _instance;
-    constructor(config: IStoreUpdateConfig);
-    checkForUpdate(): void;
-    private _extendResults(result);
-    private _triggerAlertIfEligible(result);
-    protected _openStore(): void;
+    private static _checkHasTimeouted;
+    private static _timeoutChecker;
+    private static _looperChecker;
+    static checkForUpdate(): void;
+    private static _extendResults(result);
+    private static _triggerAlertIfEligible(result);
+    protected static _openStore(): void;
 }

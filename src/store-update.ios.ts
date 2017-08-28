@@ -1,3 +1,4 @@
+import * as app from "tns-core-modules/application";
 import * as http from "tns-core-modules/http";
 import * as utils from "tns-core-modules/utils/utils";
 import { StoreUpdateCommon } from "./store-update.common";
@@ -6,21 +7,26 @@ import { AppStoreHelper } from "./helpers";
 
 export * from "./constants";
 
-export class StoreUpdate extends StoreUpdateCommon {
-  private static _instance: StoreUpdate;
+class ForegroundDelegage extends UIResponder implements UIApplicationDelegate {
+  public static ObjCProtocols = [UIApplicationDelegate];
 
-  constructor(config: IStoreUpdateConfig) {
-    if (StoreUpdate._instance instanceof StoreUpdate) {
-      return StoreUpdate._instance;
-    }
-    super(config);
-    StoreUpdate._instance = this
+  applicationDidFinishLaunchingWithOptions(): boolean {
+    StoreUpdate.checkForUpdate();
+    return true
   }
 
-  public checkForUpdate() {
-    AppStoreHelper.getAppInfos(this.bundleId, this._countryCode)
-      .then(this._extendResults)
-      .then(this._triggerAlertIfEligible.bind(this))
+  applicationWillEnterForeground(): void {
+    StoreUpdate.checkForUpdate();
+  }
+}
+app.ios.delegate = ForegroundDelegage
+
+export class StoreUpdate extends StoreUpdateCommon {
+
+  public static checkForUpdate() {
+    AppStoreHelper.getAppInfos(StoreUpdate.getBundleId(), StoreUpdate._countryCode)
+      .then(StoreUpdate._extendResults)
+      .then(StoreUpdate._triggerAlertIfEligible)
       .catch(e => console.error(e));
   }
 
@@ -28,7 +34,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Private
    */
 
-  private _extendResults(result: AppleStoreResult) {
+  private static _extendResults(result: AppleStoreResult) {
     return Object.assign(
       {},
       result,
@@ -36,14 +42,14 @@ export class StoreUpdate extends StoreUpdateCommon {
     );
   }
 
-  private _triggerAlertIfEligible(result) {
-    if (this._isEligibleForUpdate(result)) this._triggerAlertForUpdate(result.version)
+  private static _triggerAlertIfEligible(result) {
+    if (StoreUpdate._isEligibleForUpdate(result)) StoreUpdate._triggerAlertForUpdate(result.version)
   }
 
-  protected _openStore() {
+  protected static _openStore() {
     // App Path
     utils.openUrl(
-      NSURL.URLWithString(`itms-apps://itunes.com/app/${this.bundleId}`).absoluteString
+      NSURL.URLWithString(`itms-apps://itunes.com/app/${StoreUpdate.getBundleId()}`).absoluteString
     );
   }
 }

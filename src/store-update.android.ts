@@ -1,4 +1,5 @@
 import * as utils from "tns-core-modules/utils/utils";
+import * as app from "tns-core-modules/application";
 
 import { StoreUpdateCommon } from "./store-update.common";
 import { GooglePlayHelper } from "./helpers";
@@ -6,21 +7,20 @@ import { IStoreUpdateConfig, GoogleStoreResult } from './interfaces'
 
 export * from "./constants";
 
+app.on(app.resumeEvent, function () {
+  StoreUpdate.checkForUpdate();
+})
+
 export class StoreUpdate extends StoreUpdateCommon {
-  private static _instance: StoreUpdate;
 
-  constructor(config: IStoreUpdateConfig) {
-    if (StoreUpdate._instance instanceof StoreUpdate) {
-      return StoreUpdate._instance;
-    }
-    super(config);
-    StoreUpdate._instance = this;
-  }
+  private static _checkHasTimeouted = false;
+  private static _timeoutChecker;
+  private static _looperChecker;
 
-  checkForUpdate() {
-    GooglePlayHelper.getAppInfos(this.bundleId)
-      .then(this._extendResults)
-      .then(this._triggerAlertIfEligible.bind(this))
+  public static checkForUpdate() {
+    GooglePlayHelper.getAppInfos(StoreUpdate.getBundleId())
+      .then(StoreUpdate._extendResults)
+      .then(StoreUpdate._triggerAlertIfEligible.bind(StoreUpdate))
       .catch(console.error);
   }
 
@@ -28,7 +28,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Private
    */
 
-  private _extendResults(result: GoogleStoreResult) {
+  private static _extendResults(result: GoogleStoreResult) {
     return {
       version                  : result.version,
       currentVersionReleaseDate: result.date,
@@ -37,12 +37,12 @@ export class StoreUpdate extends StoreUpdateCommon {
     };
   }
 
-  private _triggerAlertIfEligible(result) {
-    if (this._isEligibleForUpdate(result)) this._triggerAlertForUpdate(result.version);
+  private static _triggerAlertIfEligible(result) {
+    if (StoreUpdate._isEligibleForUpdate(result)) StoreUpdate._triggerAlertForUpdate(result.version);
   }
 
-  protected _openStore() {
-    const storeUrl = `market://details?id=${this.bundleId}`;
+  protected static _openStore() {
+    const storeUrl = `market://details?id=${StoreUpdate.getBundleId()}`;
     utils.openUrl(storeUrl);
   }
 }
