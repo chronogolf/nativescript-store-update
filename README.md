@@ -12,28 +12,43 @@ Describe the prerequisites that the user need to have installed before using you
 
 ## Installation
 
-Describe your plugin installation steps. Ideally it would be something like:
-
-```javascript
-tns plugin add <your-plugin-name>
+```zsh
+tns plugin add nativescript-appversion
+tns plugin add nativescript-i18n
+tns plugin add nativescript-store-update
 ```
 
 ## Usage
 
-Describe any usage specifics for your plugin. Give examples for Android, iOS, Angular if needed. See [nativescript-drop-down](https://www.npmjs.com/package/nativescript-drop-down) for example.
+In your `main.ts` or `app.ts` file, before app start, call `StoreUpdate.init` with desired options like so:
 
 ``` javascript
-    Usage code snippets here
+    import { StoreUpdate, AlertTypesConstants } from "nativescript-store-update";
+
+    StoreUpdate.init({
+        notifyNbDaysAfterRelease: 1,
+        majorUpdateAlertType: AlertTypesConstants.OPTION
+    })
 ```
 
 ## API
 
-Describe your plugin methods and properties here. See [nativescript-feedback](https://github.com/EddyVerbruggen/nativescript-feedback) for example.
-
+### Configuration options
 | Property | Default | Description |
 | --- | --- | --- |
-| some property | property default value | property description, default values, etc.. |
-| another property | property default value | property description, default values, etc.. |
+| **majorUpdateAlertType** | FORCE | Type of alert for major version change |
+| **minorUpdateAlertType** | OPTION | Type of alert for minor version change |
+| **majorUpdateAlertType** | NONE | Type of alert for major version change |
+| **revisionUpdateAlertType** | NONE | Type of alert for revision version change |
+| **notifyNbDaysAfterRelease** | `1` | Number of day from update to wait before displaying alert |
+| **countryCode** | `undefined` | country to check the app for on the store |
+
+### Alert types
+| Key | Value | Description |
+| --- | --- | --- |
+| **FORCE** | `1` | Show an alert that can't be skipped where Ok send user to store |
+| **OPTION** | `2` | Show an alert that can be skipped where Ok send user to store and Skip dismis further alert display for this version |
+| **NONE** | `3` | Don't display alert at all |
 
 ## Development
 
