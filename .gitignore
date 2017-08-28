@@ -2,6 +2,7 @@
 *.js.map
 *.log
 *.d.ts
+*.nsbuildinfo
 !index.d.ts
 demo/app/*.js
 demo/*.d.ts
