@@ -1,18 +1,20 @@
-import { GooglePlayConstants } from "../constants/google-play";
+import { GooglePlayConstants } from "../constants";
+import { GoogleStoreResult } from "../interfaces";
+import { ResponseHelper } from "./";
 
 export class GooglePlayHelper {
-  public static getAppInfos(bundleID) {
-    return GooglePlayHelper._getAppPage(bundleID)
-      .then(GooglePlayHelper._handleError)
-      .then(GooglePlayHelper._convertHTMLToText)
+  public static getAppInfos(bundleId, countryCode?) {
+    return GooglePlayHelper._getAppPage(bundleId, countryCode)
+      .then(ResponseHelper.handleErrorStatus)
+      .then(response => response.text())
       .then(GooglePlayHelper._parseResource);
   }
 
-  private static _getAppPage(bundleID) {
-    return fetch(`${GooglePlayConstants.PLAY_STORE_ROOT_WEB}${bundleID}`);
+  private static _getAppPage(bundleId, countryCode?) {
+    return fetch(GooglePlayHelper._getStoreAppUrl(bundleId, countryCode));
   }
 
-  private static _parseResource(page) {
+  private static _parseResource(page): GoogleStoreResult {
     const infos: any = {};
     Object.keys(GooglePlayConstants.REGEX).map(key => {
       const regEx = GooglePlayConstants.REGEX[key].exec(page);
@@ -21,14 +23,11 @@ export class GooglePlayHelper {
     return infos;
   }
 
-  private static _handleError(response) {
-    if (response.status >= 400) {
-      throw new Error(GooglePlayConstants.PLAY_STORE_PACKAGE_NOT_PUBLISHED_IDENTIFIER);
+  private static _getStoreAppUrl(bundleId, countryCode?): string {
+    let url = `${GooglePlayConstants.PLAY_STORE_ROOT_WEB}?id=${bundleId}`;
+    if (countryCode) {
+      url += `&hl=${countryCode}`;
     }
-    return response;
-  }
-
-  private static _convertHTMLToText(response) {
-    return response.text();
+    return url;
   }
 }
