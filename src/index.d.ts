@@ -20,7 +20,7 @@ export interface GoogleStoreResult {
 export declare class StoreUpdate extends StoreUpdateCommon {
     constructor(config: IStoreUpdateConfig);
     checkForUpdate(): void;
-    private _parseResults(result);
-    private _triggerAlertForUpdate(version);
-    private _launchPlayStore();
+    private _extendResults(result);
+    private _triggerAlertIfEligible(result);
+    protected _openStore(): void;
 }

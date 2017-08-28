@@ -9,7 +9,7 @@ import * as appSettings from "tns-core-modules/application-settings";
 import { confirm, ConfirmOptions } from "tns-core-modules/ui/dialogs";
 import { getVersionNameSync, getAppIdSync } from "nativescript-appversion";
 
-import { UpdateTypesConstant, AlertTypesConstant } from "./constants";
+import { UpdateTypesConstant, AlertTypesConstant, SystemConstants } from "./constants";
 import { VersionHelper } from "./helpers";
 import { IStoreUpdateConfig } from './interfaces'
 
@@ -24,25 +24,30 @@ export interface storeUpdateParams {
   countryCode             : string;
 }
 
-const LAST_VERSION_SKIPPED_KEY = "lastVersionSkipped";
-
 export class StoreUpdateCommon {
-  private _majorUpdateAlertType    : number = AlertTypesConstant.FORCE;
-  private _minorUpdateAlertType    : number = AlertTypesConstant.OPTION;
-  private _patchUpdateAlertType    : number = AlertTypesConstant.NONE;
-  private _revisionUpdateAlertType : number = AlertTypesConstant.NONE;
-  private _notifyNbDaysAfterRelease: number = 3;
+  private _majorUpdateAlertType;
+  private _minorUpdateAlertType;
+  private _patchUpdateAlertType;
+  private _revisionUpdateAlertType;
+  private _notifyNbDaysAfterRelease;
 
-  protected _countryCode: string = 'en';
+  protected _countryCode  : string = 'en';
+  protected _defaultConfig: IStoreUpdateConfig = {
+    majorUpdateAlertType    : AlertTypesConstant.FORCE,
+    minorUpdateAlertType    : AlertTypesConstant.OPTION,
+    patchUpdateAlertType    : AlertTypesConstant.NONE,
+    revisionUpdateAlertType : AlertTypesConstant.NONE,
+    notifyNbDaysAfterRelease: 1,
+  }
 
   constructor(config: IStoreUpdateConfig) {
-    if (!config) throw new Error(`No config provided to store update plugin.`);
-    if (config.majorUpdateAlertType) this._majorUpdateAlertType = config.majorUpdateAlertType;
-    if (config.minorUpdateAlertType) this._minorUpdateAlertType = config.minorUpdateAlertType;
-    if (config.patchUpdateAlertType) this._patchUpdateAlertType = config.patchUpdateAlertType;
-    if (config.revisionUpdateAlertType) this._revisionUpdateAlertType = config.revisionUpdateAlertType;
-    if (config.notifyNbDaysAfterRelease) this._notifyNbDaysAfterRelease = config.notifyNbDaysAfterRelease;
-    if (config.countryCode) this._countryCode = config.countryCode;
+    const conf = Object.assign({}, this._defaultConfig, config)
+    this._majorUpdateAlertType     = conf.majorUpdateAlertType;
+    this._minorUpdateAlertType     = conf.minorUpdateAlertType;
+    this._patchUpdateAlertType     = conf.patchUpdateAlertType;
+    this._revisionUpdateAlertType  = conf.revisionUpdateAlertType;
+    this._notifyNbDaysAfterRelease = conf.notifyNbDaysAfterRelease;
+    this._countryCode              = conf.countryCode;
 
     // Resumed is called both at launch and resume of the app
     app.on(app.resumeEvent, () => {
@@ -77,8 +82,18 @@ export class StoreUpdateCommon {
     return true;
   }
 
+  // Will be overriden
+  protected _openStore() {}
+
   protected _setVersionAsSkipped(version: string) {
-    appSettings.setString(LAST_VERSION_SKIPPED_KEY, version);
+    appSettings.setString(SystemConstants.LAST_VERSION_SKIPPED_KEY, version);
+  }
+
+  protected _triggerAlertForUpdate(version: string) {
+    this._showAlertForUpdate(version).then((confirmed: boolean) => {
+      if (confirmed) this._openStore();
+      else this._setVersionAsSkipped(version);
+    });
   }
 
   protected _getAlertTypeForVersion(currentAppStoreVersion: string): number {
@@ -148,7 +163,7 @@ export class StoreUpdateCommon {
   }
 
   private _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
-    const lastVersionSkipped = appSettings.getString(LAST_VERSION_SKIPPED_KEY);
+    const lastVersionSkipped = appSettings.getString(SystemConstants.LAST_VERSION_SKIPPED_KEY);
     return currentAppStoreVersion === lastVersionSkipped;
   }
 

@@ -25,7 +25,9 @@ export declare class StoreUpdateCommon {
         minimumOsVersion: any;
         systemVersion: any;
     }): boolean;
+    protected _openStore(): void;
     protected _setVersionAsSkipped(version: string): void;
+    protected _triggerAlertForUpdate(version: string): void;
     protected _getAlertTypeForVersion(currentAppStoreVersion: string): number;
     protected _buildDialogOptions({skippable}?: {
         skippable?: boolean;
