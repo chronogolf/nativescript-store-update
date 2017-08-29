@@ -1,5 +1,4 @@
 export class VersionHelper {
-
   public static isHigher(left: string, right: string): boolean {
     return this._compareVersions(left, right) > 0
   }
@@ -36,8 +35,9 @@ export class VersionHelper {
     const a = left.split('.')
     const b = right.split('.')
 
-    return (a.length > index) &&
-      (b.length <= index || parseInt(a[index]) > parseInt(b[index]))
+    return (
+      a.length > index && (b.length <= index || parseInt(a[index], 10) > parseInt(b[index], 10))
+    )
   }
 
   private static _compareVersions(left: string, right: string): number {
@@ -45,11 +45,11 @@ export class VersionHelper {
     const b = right.split('.')
 
     for (let i = 0; i < Math.max(a.length, b.length); i++) {
-      const a_int = parseInt(a[i])
-      const b_int = parseInt(b[i])
-      if ((a[i] && !b[i] && a_int > 0) || (a_int > b_int)) return 1;
-      if ((b[i] && !a[i] && b_int > 0) || (a_int < b_int)) return -1;
+      const aInt = parseInt(a[i], 10)
+      const bInt = parseInt(b[i], 10)
+      if ((a[i] && !b[i] && aInt > 0) || aInt > bInt) return 1
+      if ((b[i] && !a[i] && bInt > 0) || aInt < bInt) return -1
     }
-    return 0;
+    return 0
   }
 }
