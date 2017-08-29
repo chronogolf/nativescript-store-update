@@ -36,18 +36,18 @@ In your `main.ts` or `app.ts` file, before app start, call `StoreUpdate.init` wi
 ### Configuration options
 | Property | Default | Description |
 | --- | --- | --- |
-| **majorUpdateAlertType** | FORCE | Type of alert for major version change |
-| **minorUpdateAlertType** | OPTION | Type of alert for minor version change |
-| **majorUpdateAlertType** | NONE | Type of alert for major version change |
-| **revisionUpdateAlertType** | NONE | Type of alert for revision version change |
-| **notifyNbDaysAfterRelease** | `1` | Number of day from update to wait before displaying alert |
-| **countryCode** | `en` | country to check the app for on the store |
+| **majorUpdateAlertType** | FORCE | Alert type for major version change |
+| **minorUpdateAlertType** | OPTION | Alert type for minor version change |
+| **majorUpdateAlertType** | NONE | Alert type for major version change |
+| **revisionUpdateAlertType** | NONE | Alert type for revision version change |
+| **notifyNbDaysAfterRelease** | `1` | Delays the update prompt by a specific number of days |
+| **countryCode** | `en` | country store code |
 
 ### Alert types
 | Key | Value | Description |
 | --- | --- | --- |
-| **FORCE** | `1` | Show an alert that can't be skipped where Ok send user to store |
-| **OPTION** | `2` | Show an alert that can be skipped where Ok send user to store and Skip dismis further alert display for this version |
+| **FORCE** | `1` | Show an alert that can't be skipped |
+| **OPTION** | `2` | Show an alert that can be skipped |
 | **NONE** | `3` | Don't display alert at all |
 
 ## Development
