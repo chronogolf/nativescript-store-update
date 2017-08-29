@@ -1,5 +1,5 @@
 import { GooglePlayConstants } from "../constants";
-import { GoogleStoreResult } from "../interfaces";
+import { IGoogleStoreResult } from "../interfaces";
 import { ResponseHelper } from "./";
 
 export class GooglePlayHelper {
@@ -14,7 +14,7 @@ export class GooglePlayHelper {
     return fetch(GooglePlayHelper._getStoreAppUrl(bundleId, countryCode));
   }
 
-  private static _parseResource(page): GoogleStoreResult {
+  private static _parseResource(page): IGoogleStoreResult {
     const infos: any = {};
     Object.keys(GooglePlayConstants.REGEX).map(key => {
       const regEx = GooglePlayConstants.REGEX[key].exec(page);

@@ -1,4 +1,4 @@
-export interface GoogleStoreResult {
+export interface IGoogleStoreResult {
   version: string;
   os     : string;
   date   : string;

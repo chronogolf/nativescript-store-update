@@ -1,5 +1,5 @@
 import { AppStoreConstants } from "../constants";
-import { AppleStoreInfos, AppleStoreResult } from "../interfaces";
+import { IAppleStoreInfos, IAppleStoreResult } from "../interfaces";
 import { ResponseHelper } from "./";
 
 export class AppStoreHelper {
@@ -14,7 +14,7 @@ export class AppStoreHelper {
     return fetch(AppStoreHelper._getItunesLookupUrl(bundleID, countryCode));
   }
 
-  private static _parseResource(resource: AppleStoreInfos): AppleStoreResult {
+  private static _parseResource(resource: IAppleStoreInfos): IAppleStoreResult {
     if (resource.resultCount === 0) return null;
     return resource.results[0];
   }

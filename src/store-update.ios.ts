@@ -2,7 +2,7 @@ import * as app from "tns-core-modules/application";
 import * as http from "tns-core-modules/http";
 import * as utils from "tns-core-modules/utils/utils";
 import { StoreUpdateCommon } from "./store-update.common";
-import { IStoreUpdateConfig, AppleStoreResult } from "./interfaces";
+import { IStoreUpdateConfig, IAppleStoreResult } from "./interfaces";
 import { AppStoreHelper } from "./helpers";
 
 export * from "./constants";
@@ -34,7 +34,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Private
    */
 
-  private static _extendResults(result: AppleStoreResult) {
+  private static _extendResults(result: IAppleStoreResult) {
     return Object.assign(
       {},
       result,

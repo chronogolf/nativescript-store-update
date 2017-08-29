@@ -1,4 +1,4 @@
-export interface AppleStoreResult {
+export interface IAppleStoreResult {
   bundleId: string;
   trackId: number;
   version: string;
@@ -11,7 +11,7 @@ export interface AppleStoreResult {
    Used to contain all versions, but now only contains the latest version.
    Still returns an instance of Array.
  */
-export interface AppleStoreInfos {
+export interface IAppleStoreInfos {
   resultCount: number;
-  results: AppleStoreResult[];
+  results: IAppleStoreResult[];
 }

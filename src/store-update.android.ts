@@ -3,7 +3,7 @@ import * as app from "tns-core-modules/application";
 
 import { StoreUpdateCommon } from "./store-update.common";
 import { GooglePlayHelper } from "./helpers";
-import { IStoreUpdateConfig, GoogleStoreResult } from './interfaces'
+import { IStoreUpdateConfig, IGoogleStoreResult } from './interfaces'
 
 export * from "./constants";
 
@@ -28,7 +28,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Private
    */
 
-  private static _extendResults(result: GoogleStoreResult) {
+  private static _extendResults(result: IGoogleStoreResult) {
     return {
       version                  : result.version,
       currentVersionReleaseDate: result.date,
