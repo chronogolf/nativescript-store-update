@@ -6,6 +6,36 @@
         "./tslint-prettier.config"
     ],
     "rules": {
-        "no-console":[false]
+        "curly": [true, "ignore-same-line"],
+        "member-ordering": [
+            true,
+            {
+              "order": [
+                "public-static-field",
+                "protected-static-field",
+                "private-static-field",
+                "public-instance-field",
+                "protected-instance-field",
+                "private-instance-field",
+                "public-constructor",
+                "protected-constructor",
+                "private-constructor",
+                "public-static-method",
+                "public-instance-method",
+                "protected-static-method",
+                "protected-instance-method",
+                "private-static-method",
+                "private-instance-method"
+              ]
+            }
+        ],
+        "no-console": [false],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore",
+            "allow-pascal-case"
+        ]
     }
 }
