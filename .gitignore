@@ -4,6 +4,7 @@
 *.d.ts
 *.nsbuildinfo
 !index.d.ts
+!tslint-prettier.config.js
 demo/app/*.js
 demo/*.d.ts
 demo/platforms
