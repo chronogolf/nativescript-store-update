@@ -9,11 +9,20 @@ import * as appSettings from "tns-core-modules/application-settings";
 import { confirm, ConfirmOptions } from "tns-core-modules/ui/dialogs";
 import { getVersionNameSync, getAppIdSync } from "nativescript-appversion";
 
-import { UpdateTypesConstants, AlertTypesConstants, StoreUpdateConstants } from "./constants";
+import { UpdateTypesConstants, AlertTypesConstants } from "./constants";
 import { VersionHelper } from "./helpers";
 import { IStoreUpdateConfig } from './interfaces'
 
 declare var global: any;
+const LAST_VERSION_SKIPPED_KEY = "lastVersionSkipped";
+const defaultConfig: IStoreUpdateConfig = {
+  majorUpdateAlertType    : AlertTypesConstants.FORCE,
+  minorUpdateAlertType    : AlertTypesConstants.OPTION,
+  patchUpdateAlertType    : AlertTypesConstants.NONE,
+  revisionUpdateAlertType : AlertTypesConstants.NONE,
+  notifyNbDaysAfterRelease: 1,
+  countryCode             : 'en'
+}
 
 export class StoreUpdateCommon {
   public static instatiated = false;
@@ -32,7 +41,7 @@ export class StoreUpdateCommon {
 
   public static init(config: IStoreUpdateConfig) {
     if (this.instatiated) return
-    const conf = Object.assign({}, StoreUpdateConstants.DEFAULT_CONFIG, config)
+    const conf = Object.assign({}, defaultConfig, config)
     this.instatiated               = true
     this._majorUpdateAlertType     = conf.majorUpdateAlertType;
     this._minorUpdateAlertType     = conf.minorUpdateAlertType;
@@ -66,7 +75,7 @@ export class StoreUpdateCommon {
   protected static _openStore() {}
 
   protected static _setVersionAsSkipped(version: string) {
-    appSettings.setString(StoreUpdateConstants.LAST_VERSION_SKIPPED_KEY, version);
+    appSettings.setString(LAST_VERSION_SKIPPED_KEY, version);
   }
 
   protected static _triggerAlertForUpdate(version: string) {
@@ -143,7 +152,7 @@ export class StoreUpdateCommon {
   }
 
   private static _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
-    const lastVersionSkipped = appSettings.getString(StoreUpdateConstants.LAST_VERSION_SKIPPED_KEY);
+    const lastVersionSkipped = appSettings.getString(LAST_VERSION_SKIPPED_KEY);
     return currentAppStoreVersion === lastVersionSkipped;
   }
 
