@@ -3,7 +3,8 @@
 *.log
 *.d.ts
 *.nsbuildinfo
-!index.d.ts
+!/index.d.ts
+!/reference.d.ts
 !tslint-prettier.config.js
 demo/app/*.js
 demo/*.d.ts
