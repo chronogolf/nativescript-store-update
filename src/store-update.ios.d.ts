@@ -1,22 +1,8 @@
 import { StoreUpdateCommon } from "./store-update.common";
-export interface AppleStoreInfos {
-    resultCount: number;
-    results: AppleStoreResult[];
-}
-export interface AppleStoreResult {
-    bundleId: string;
-    trackId: number;
-    version: string;
-    minimumOsVersion: string;
-    currentVersionReleaseDate: string;
-}
 export * from "./constants";
 export declare class StoreUpdate extends StoreUpdateCommon {
-    constructor();
-    init(initParams: any): void;
-    checkForUpdate(): void;
-    private _parseResults(data);
-    private _triggerAlertForUpdate(version);
-    private _launchAppStore();
-    private _getItunesLookupUrl();
+    static checkForUpdate(): void;
+    private static _extendResults(result);
+    private static _triggerAlertIfEligible(result);
+    protected static _openStore(): void;
 }

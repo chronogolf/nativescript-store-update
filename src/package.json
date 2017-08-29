@@ -17,18 +17,16 @@
   "scripts": {
     "tsc": "tsc -skipLibCheck",
     "build": "npm i && tsc",
-    "setup": "npm i && cd ../demo && npm i && cd ../src && npm run plugin.link",
+    "setup": "npm i && cd ../demo && npm i && cd ../demo-angular && npm i && cd ../src",
     "test.android": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
     "test.ios": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
     "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-    "plugin.link": "npm link && cd ../demo && npm link nativescript-store-update && cd ../src",
     "plugin.tscwatch": "npm run tsc -- -w",
     "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
     "build.ios": "npm i && npm run tsc && cd ../demo && tns build ios --syncAllFiles",
     "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles",
-    "demo.reset": "cd ../demo && rimraf platforms",
-    "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-store-update && tns plugin add ../src",
-    "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
+    "demo.reset": "cd ../demo && rimraf platforms hooks node_modules && npm i",
+    "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../demo-angular && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules",
     "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'"
   },
   "keywords": [
@@ -55,19 +53,22 @@
     "nativescript-appversion": "^1.4.1"
   },
   "devDependencies": {
+    "@angular/core": "^4.3.6",
     "format": "^0.2.2",
     "prompt": "^1.0.0",
     "rimraf": "^2.5.0",
+    "rxjs": "^5.4.3",
     "tns-core-modules": "^3.1.0",
     "tns-platform-declarations": "^3.1.0",
     "tslint": "^5.0.0",
-    "typescript": "~2.3.0"
+    "typescript": "~2.3.0",
+    "zone.js": "^0.8.17"
   },
   "dependencies": {
     "@types/moment": "^2.13.0",
     "moment": "2.18.1",
-    "nativescript-i18n": "^0.2.2",
-    "nativescript-appversion": "^1.4.1"
+    "nativescript-appversion": "^1.4.1",
+    "nativescript-i18n": "^0.2.2"
   },
   "bootstrapper": "nativescript-plugin-seed"
 }

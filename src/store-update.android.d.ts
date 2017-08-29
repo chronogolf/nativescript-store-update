@@ -1,15 +1,11 @@
 import { StoreUpdateCommon } from "./store-update.common";
 export * from "./constants";
-export interface GoogleStoreResult {
-    version: string;
-    minimumOsVersion: string;
-    currentVersionReleaseDate: string;
-}
 export declare class StoreUpdate extends StoreUpdateCommon {
-    constructor();
-    init(initParams: any): void;
-    checkForUpdate(): void;
-    private _parseResults(result);
-    private _triggerAlertForUpdate(version);
-    private _launchPlayStore();
+    private static _checkHasTimeouted;
+    private static _timeoutChecker;
+    private static _looperChecker;
+    static checkForUpdate(): void;
+    private static _extendResults(result);
+    private static _triggerAlertIfEligible(result);
+    protected static _openStore(): void;
 }

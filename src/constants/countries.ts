@@ -1,5 +1,5 @@
 /// i18n/l10n constants
-export const CountriesConstant = {
+export const CountriesConstants = {
   Uk: "uk",
   Usa: "us",
   France: "fr",
