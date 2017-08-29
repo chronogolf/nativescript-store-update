@@ -1,3 +1,3 @@
-require("./vendor-platform");
+require('./vendor-platform')
 
-require("bundle-entry-points");
+require('bundle-entry-points')

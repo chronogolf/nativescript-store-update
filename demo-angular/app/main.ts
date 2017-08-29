@@ -1,14 +1,14 @@
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
-import { platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { StoreUpdate, AlertTypesConstants } from "nativescript-store-update";
-import { AppModule } from "./app.module";
+import { platformNativeScriptDynamic } from 'nativescript-angular/platform'
+import { AlertTypesConstants, StoreUpdate } from 'nativescript-store-update'
+import { AppModule } from './app.module'
 
 StoreUpdate.init({
+  majorUpdateAlertType: AlertTypesConstants.OPTION,
   notifyNbDaysAfterRelease: 1,
-  majorUpdateAlertType: AlertTypesConstants.OPTION
 })
 // A traditional NativeScript application starts by initializing global objects, setting up global CSS rules, creating, and navigating to the main page.
 // Angular applications need to take care of their own initialization: modules, components, directives, routes, DI providers.
 // A NativeScript Angular app needs to make both paradigms work together, so we provide a wrapper platform object, platformNativeScriptDynamic,
 // that sets up a NativeScript application and can bootstrap the Angular framework.
-platformNativeScriptDynamic().bootstrapModule(AppModule);
+platformNativeScriptDynamic().bootstrapModule(AppModule)
