@@ -3,7 +3,15 @@
 *.log
 *.d.ts
 *.nsbuildinfo
-!index.d.ts
+*.DS_Store
+
+!/index.d.ts
+!/reference.d.ts
+!tslint-prettier.config.js
+!prettier.config.js
+!prettier.config.js
+!src/assign.helper.js
+
 demo/app/*.js
 demo/*.d.ts
 demo/platforms
@@ -16,4 +24,3 @@ demo-angular/hooks
 demo-angular/platforms
 src/node_modules
 src/hooks
-*.DS_Store

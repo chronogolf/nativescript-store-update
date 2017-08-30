@@ -1,9 +1,10 @@
-﻿import "./bundle-config";
-import * as application from "tns-core-modules/application";
-import { StoreUpdate, AlertTypesConstants } from "nativescript-store-update";
+﻿import './bundle-config'
+
+import { AlertTypesConstants, StoreUpdate } from 'nativescript-store-update'
+import * as application from 'tns-core-modules/application'
 
 StoreUpdate.init({
+  majorUpdateAlertType: AlertTypesConstants.OPTION,
   notifyNbDaysAfterRelease: 1,
-  majorUpdateAlertType: AlertTypesConstants.OPTION
 })
-application.start({ moduleName: "main-page" });
+application.start({ moduleName: 'main-page' })

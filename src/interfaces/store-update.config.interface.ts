@@ -1,8 +1,8 @@
 export interface IStoreUpdateConfig {
-  majorUpdateAlertType    ?: number
-  minorUpdateAlertType    ?: number
-  patchUpdateAlertType    ?: number
-  revisionUpdateAlertType ?: number
+  majorUpdateAlertType?: number
+  minorUpdateAlertType?: number
+  patchUpdateAlertType?: number
+  revisionUpdateAlertType?: number
   notifyNbDaysAfterRelease?: number
-  countryCode             ?: string
+  countryCode?: string
 }

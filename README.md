@@ -57,6 +57,10 @@ You can then use:
 - `npm run demo.ios` or `npm run demo.android` to start the demo
 - `npm run plugin.tscwatch` to watch plugin file and start developing!
 
+The repo contains 2 demos folder, one with angular, and one without.
+Demos use the bundleId `com.bitstrips.imoji` as their App version contains Major, Minor and Patch numbers, and they update their app really often.
+You can change parameters passed ton package init in `main.ts` or `app.ts` files and change app version in android `app.gradle` and ios `info.plist` config files to test the feature.
+
 ## License
 
 Apache License Version 2.0, January 2004

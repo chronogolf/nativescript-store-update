@@ -1,0 +1,4 @@
+{
+  "tslint.configFile": "tslint.json",
+  "tslint.nodePath": "src/node_modules"
+}

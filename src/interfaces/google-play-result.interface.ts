@@ -1,5 +1,5 @@
 export interface IGoogleStoreResult {
-  version: string;
-  os     : string;
-  date   : string;
+  version: string
+  os: string
+  date: string
 }
