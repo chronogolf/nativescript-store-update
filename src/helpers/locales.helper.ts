@@ -1,13 +1,10 @@
-const translationsFr = require('../i18n/fr.json')
-const translationsEn = require('../i18n/en.json')
-
 export class LocalesHelper {
   static currentLang = 'en'
 
   private static _defaultLang = 'en'
   private static _translations = {
-    en: translationsEn,
-    fr: translationsFr,
+    en: require('../i18n/en.json'),
+    fr: require('../i18n/fr.json'),
   }
 
   static translate(key: string): string {
