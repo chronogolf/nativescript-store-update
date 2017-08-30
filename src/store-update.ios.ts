@@ -15,7 +15,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Public
    */
 
-  public static checkForUpdate() {
+  static checkForUpdate() {
     AppStoreHelper.getAppInfos(StoreUpdate.getBundleId(), StoreUpdate._countryCode)
       .then(StoreUpdate._extendResults)
       .then(StoreUpdate._triggerAlertIfEligible)

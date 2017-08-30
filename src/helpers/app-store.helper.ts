@@ -3,7 +3,7 @@ import { IAppleStoreInfos, IAppleStoreResult } from '../interfaces'
 import { ResponseHelper } from './'
 
 export class AppStoreHelper {
-  public static getAppInfos(bundleID, countryCode?) {
+  static getAppInfos(bundleID, countryCode?) {
     return AppStoreHelper._getLookupFile(bundleID, countryCode)
       .then(ResponseHelper.handleErrorStatus)
       .then(response => response.json())

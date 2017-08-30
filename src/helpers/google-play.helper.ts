@@ -3,7 +3,7 @@ import { IGoogleStoreResult } from '../interfaces'
 import { ResponseHelper } from './'
 
 export class GooglePlayHelper {
-  public static getAppInfos(bundleId, countryCode?) {
+  static getAppInfos(bundleId, countryCode?) {
     return GooglePlayHelper._getAppPage(bundleId, countryCode)
       .then(ResponseHelper.handleErrorStatus)
       .then(response => response.text())

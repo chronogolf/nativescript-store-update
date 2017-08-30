@@ -7,6 +7,10 @@
     ],
     "rules": {
         "curly": [true, "ignore-same-line"],
+        "member-access": [
+            true,
+            "no-public"
+        ],
         "member-ordering": [
             true,
             {

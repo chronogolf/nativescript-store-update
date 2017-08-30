@@ -24,7 +24,7 @@ const defaultConfig: IStoreUpdateConfig = {
 }
 
 export class StoreUpdateCommon {
-  public static instatiated = false
+  static instatiated = false
 
   protected static _countryCode
 
@@ -38,7 +38,7 @@ export class StoreUpdateCommon {
    *  Public
    */
 
-  public static init(config: IStoreUpdateConfig) {
+  static init(config: IStoreUpdateConfig) {
     if (this.instatiated) return
     const conf = {
       ...defaultConfig,
@@ -53,11 +53,11 @@ export class StoreUpdateCommon {
     this._countryCode = conf.countryCode
   }
 
-  public static getBundleId(): string {
+  static getBundleId(): string {
     return getAppIdSync()
   }
 
-  public static getLocalVersionNumber(): string {
+  static getLocalVersionNumber(): string {
     return getVersionNameSync()
   }
 
