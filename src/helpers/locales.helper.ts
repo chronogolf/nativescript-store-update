@@ -16,8 +16,9 @@ export class LocalesHelper {
     return translation
   }
 
-  static changeLang(langKey: string): void {
-    langKey = langKey.split('-')[0]
+  static changeLang(key: string): void {
+    key = key.toLowerCase()
+    const langKey = LocalesHelper._translations[key] ? key : key.split('-')[0]
     if (!LocalesHelper._translations[langKey]) {
       LocalesHelper.currentLang = LocalesHelper._defaultLang
       console.error(`
