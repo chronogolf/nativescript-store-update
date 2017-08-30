@@ -1,3 +1,5 @@
+require('./assign.helper')
+
 import * as moment from 'moment'
 import * as app from 'tns-core-modules/application'
 import * as appSettings from 'tns-core-modules/application-settings'
@@ -172,8 +174,9 @@ export class StoreUpdateCommon {
     const daysSinceRelease = moment().diff(moment(new Date(releaseDate)), 'days')
     if (daysSinceRelease < this._notifyNbDaysAfterRelease) {
       console.log(
-        `Your app has been released for ${daysSinceRelease} days, but we cannot prompt the user until ${this
-          ._notifyNbDaysAfterRelease} days have passed.`
+        `Your app has been released for ${daysSinceRelease} days,
+        but we cannot prompt the user until
+        ${this._notifyNbDaysAfterRelease} days have passed.`
       )
     }
 
