@@ -23,7 +23,6 @@
 		"@angular/router": "~4.2.0",
 		"nativescript-angular": "~4.2.0",
 		"nativescript-appversion": "^1.4.1",
-		"nativescript-i18n": "^0.2.2",
 		"nativescript-store-update": "file:../src",
 		"reflect-metadata": "~0.1.8",
 		"rxjs": "~5.4.2",
