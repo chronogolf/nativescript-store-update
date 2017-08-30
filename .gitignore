@@ -6,6 +6,7 @@
 !/index.d.ts
 !/reference.d.ts
 !tslint-prettier.config.js
+!prettier.config.js
 demo/app/*.js
 demo/*.d.ts
 demo/platforms
