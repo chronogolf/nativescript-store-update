@@ -30,6 +30,8 @@
             }
         ],
         "no-console": [false],
+        "only-arrow-functions": [false],
+        "no-var-requires": false,
         "variable-name": [
             true,
             "ban-keywords",
