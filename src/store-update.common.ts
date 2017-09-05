@@ -4,12 +4,13 @@ import * as moment from 'moment'
 import * as app from 'tns-core-modules/application'
 import * as appSettings from 'tns-core-modules/application-settings'
 import { Observable } from 'tns-core-modules/data/observable'
+import { device } from 'tns-core-modules/platform'
 
 import { getAppIdSync, getVersionNameSync } from 'nativescript-appversion'
 import { confirm, ConfirmOptions } from 'tns-core-modules/ui/dialogs'
 
 import { AlertTypesConstants, UpdateTypesConstants } from './constants'
-import { VersionHelper } from './helpers'
+import { LocalesHelper, VersionHelper } from './helpers'
 import { IStoreUpdateConfig } from './interfaces'
 
 declare var global: any
@@ -24,7 +25,7 @@ const defaultConfig: IStoreUpdateConfig = {
 }
 
 export class StoreUpdateCommon {
-  public static instatiated = false
+  static instatiated = false
 
   protected static _countryCode
 
@@ -38,7 +39,7 @@ export class StoreUpdateCommon {
    *  Public
    */
 
-  public static init(config: IStoreUpdateConfig) {
+  static init(config: IStoreUpdateConfig) {
     if (this.instatiated) return
     const conf = {
       ...defaultConfig,
@@ -51,13 +52,14 @@ export class StoreUpdateCommon {
     this._revisionUpdateAlertType = conf.revisionUpdateAlertType
     this._notifyNbDaysAfterRelease = conf.notifyNbDaysAfterRelease
     this._countryCode = conf.countryCode
+    LocalesHelper.changeLang(device.language)
   }
 
-  public static getBundleId(): string {
+  static getBundleId(): string {
     return getAppIdSync()
   }
 
-  public static getLocalVersionNumber(): string {
+  static getLocalVersionNumber(): string {
     return getVersionNameSync()
   }
 
@@ -123,16 +125,16 @@ export class StoreUpdateCommon {
 
   protected static _buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
     let options = {
-      message: 'A new version is available on the store',
+      message: LocalesHelper.translate('ALERT_MESSAGE'),
       neutralButtonText: null,
-      okButtonText: 'Ok',
-      title: 'Update available',
+      okButtonText: LocalesHelper.translate('ALERT_UPDATE_BUTTON'),
+      title: LocalesHelper.translate('ALERT_TITLE'),
     }
 
     if (skippable) {
       options = {
         ...options,
-        neutralButtonText: 'Skip',
+        neutralButtonText: LocalesHelper.translate('ALERT_SKIP_BUTTON'),
       }
     }
     return options

@@ -1,29 +1,29 @@
 export class VersionHelper {
-  public static isHigher(left: string, right: string): boolean {
+  static isHigher(left: string, right: string): boolean {
     return this._compareVersions(left, right) > 0
   }
 
-  public static isEqualOrHigher(left: string, right: string): boolean {
+  static isEqualOrHigher(left: string, right: string): boolean {
     return this._compareVersions(left, right) !== -1
   }
 
   // A.b.c.d
-  public static isMajorUpdate(left: string, right: string): boolean {
+  static isMajorUpdate(left: string, right: string): boolean {
     return this._isIndexSectionHigher(left, right, 0)
   }
 
   // a.B.c.d
-  public static isMinorUpdate(left: string, right: string): boolean {
+  static isMinorUpdate(left: string, right: string): boolean {
     return this._isIndexSectionHigher(left, right, 1)
   }
 
   // a.b.C.d
-  public static isPatchUpdate(left: string, right: string): boolean {
+  static isPatchUpdate(left: string, right: string): boolean {
     return this._isIndexSectionHigher(left, right, 2)
   }
 
   // a.b.c.D
-  public static isRevisionUpdate(left: string, right: string): boolean {
+  static isRevisionUpdate(left: string, right: string): boolean {
     return this._isIndexSectionHigher(left, right, 3)
   }
 

@@ -31,6 +31,11 @@ In your `main.ts` or `app.ts` file, before app start, call `StoreUpdate.init` wi
     })
 ```
 
+## Localization
+
+Translations are handled via json files which are located in `src/i18n` folder and required by hand in the `src/helpers/locales.helper.ts` file. If you want to contribute a regionalized translation, you must use the `lang-regionCode` format specified in [Apple doc](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html), but with the country lowercased (ex: `fr-ca`, `en-us`)
+
+
 ## API
 
 ### Configuration options
