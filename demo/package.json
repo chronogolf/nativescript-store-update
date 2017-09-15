@@ -12,7 +12,8 @@
     "nativescript-appversion": "^1.4.1",
     "nativescript-store-update": "file:../src",
     "nativescript-unit-test-runner": "^0.3.4",
-    "tns-core-modules": "^3.1.1"
+    "tns-core-modules": "^3.1.1",
+    "moment": "2.18.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.1.3",
