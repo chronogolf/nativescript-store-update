@@ -7,6 +7,8 @@ import { StoreUpdateCommon } from './store-update.common'
 import { ForegroundDelegage } from './store-update.delegate'
 
 export * from './constants'
+export * from './helpers'
+export * from './interfaces'
 
 app.ios.delegate = ForegroundDelegage
 

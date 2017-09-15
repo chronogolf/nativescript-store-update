@@ -6,6 +6,8 @@ import { IGoogleStoreResult, IStoreUpdateConfig } from './interfaces'
 import { StoreUpdateCommon } from './store-update.common'
 
 export * from './constants'
+export * from './helpers'
+export * from './interfaces'
 
 app.on(app.resumeEvent, () => {
   StoreUpdate.checkForUpdate()
@@ -20,7 +22,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    *  Public
    */
 
-  public static checkForUpdate() {
+  static checkForUpdate() {
     GooglePlayHelper.getAppInfos(StoreUpdate.getBundleId())
       .then(StoreUpdate._extendResults)
       .then(StoreUpdate._triggerAlertIfEligible.bind(StoreUpdate))
