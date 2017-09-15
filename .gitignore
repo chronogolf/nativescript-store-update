@@ -13,6 +13,7 @@
 !src/assign.helper.js
 
 demo/app/*.js
+!demo/app/tests/*.js
 demo/*.d.ts
 demo/platforms
 demo/hooks
