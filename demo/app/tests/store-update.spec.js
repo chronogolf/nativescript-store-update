@@ -61,6 +61,17 @@ describe('StoreUpdate ', () => {
 
   })
 
+  describe('_setVersionAsSkipped function', () => {
+    beforeAll(() => {
+      spyOn(appSettings, 'setString')
+    })
+    it('should set skipped version in app settings', () => {
+      const version = '1.2.1.1'
+      StoreUpdate._setVersionAsSkipped(version)
+      expect(appSettings.setString).toHaveBeenCalledWith('lastVersionSkipped', version)
+    })
+  })
+
   describe('_triggerAlertForUpdate function', () => {
     beforeAll(() => {
       spyOn(StoreUpdate, '_openStore')
