@@ -4,38 +4,29 @@ const platform = require('tns-core-modules/platform')
 const utils = require('tns-core-modules/utils/utils')
 const StoreUpdate = StoreUpdateModule.StoreUpdate
 const AlertTypesConstants = StoreUpdateModule.AlertTypesConstants
-
-const config = {
-  majorUpdateAlertType: AlertTypesConstants.FORCE,
-  minorUpdateAlertType: AlertTypesConstants.OPTION,
-  patchUpdateAlertType: AlertTypesConstants.NONE,
-  revisionUpdateAlertType: AlertTypesConstants.OPTION,
-  notifyNbDaysAfterRelease: 2,
-  countryCode: 'ca',
-}
+const testConstants = require('./tests.constants.spec')
 
 if (!platform.isAndroid) return
 
 describe('StoreUpdate ANDROID ', () => {
   beforeAll(() => {
-    StoreUpdate.init(config)
+    StoreUpdate.init(testConstants.config)
   })
 
   describe('_openStore function', () => {
     it('should open store page', () => {
-      const storeURL = 'market://details?id=com.bitstrips.imoji'
       spyOn(utils, 'openUrl')
       StoreUpdate._openStore()
-      expect(utils.openUrl).toHaveBeenCalledWith(storeURL)
+      expect(utils.openUrl).toHaveBeenCalledWith(testConstants.android.storeURL)
     })
   })
 
   describe('_extendResults function', () => {
     it('should return formated results', () => {
       const results = {
-        version: '1.1.1.1',
-        os: '4.2',
-        date: moment().toDate(),
+        version: testConstants.environment.appVersion,
+        os: testConstants.environment.osVersion,
+        date: testConstants.dates.today,
       }
       const extendedResults = {
         currentVersionReleaseDate: results.date,

@@ -4,26 +4,18 @@ const platform = require('tns-core-modules/platform')
 const utils = require('tns-core-modules/utils/utils')
 const StoreUpdate = StoreUpdateModule.StoreUpdate
 const AlertTypesConstants = StoreUpdateModule.AlertTypesConstants
-
-const config = {
-  majorUpdateAlertType: AlertTypesConstants.FORCE,
-  minorUpdateAlertType: AlertTypesConstants.OPTION,
-  patchUpdateAlertType: AlertTypesConstants.NONE,
-  revisionUpdateAlertType: AlertTypesConstants.OPTION,
-  notifyNbDaysAfterRelease: 2,
-  countryCode: 'ca',
-}
+const testConstants = require('./tests.constants.spec')
 
 if (!platform.isIOS) return
 
 describe('StoreUpdate IOS ', () => {
   beforeAll(() => {
-    StoreUpdate.init(config)
+    StoreUpdate.init(testConstants.config)
   })
 
   describe('_openStore function', () => {
     it('should open store page', () => {
-      const storeURL = NSURL.URLWithString(`itms-apps://itunes.com/app/com.bitstrips.imoji`).absoluteString
+      const storeURL = NSURL.URLWithString(testConstants.ios.storeURL).absoluteString
       spyOn(utils, 'openUrl')
       StoreUpdate._openStore()
       expect(utils.openUrl).toHaveBeenCalledWith(storeURL)
@@ -33,14 +25,14 @@ describe('StoreUpdate IOS ', () => {
   describe('_extendResults function', () => {
     it('should return formated results', () => {
       const results = {
-        bundleId: 'com.bitstrips.imoji',
+        bundleId: testConstants.environment.appId,
         trackId: 12,
-        version: '1.1.1.1',
-        minimumOsVersion: '4.2',
-        currentVersionReleaseDate: moment().toDate(),
+        version: testConstants.environment.appVersion,
+        minimumOsVersion: testConstants.environment.osVersion,
+        currentVersionReleaseDate: testConstants.dates.today.toDate(),
       }
       const extendedResults = Object.assign({
-        systemVersion: UIDevice.currentDevice.systemVersion,
+        systemVersion: testConstants.environment.osVersion,
       }, results)
       expect(StoreUpdate._extendResults(results)).toEqual(extendedResults)
     })

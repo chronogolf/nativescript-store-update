@@ -1,58 +1,57 @@
 const StoreUpdate = require('nativescript-store-update')
 const AppStoreHelper = StoreUpdate.AppStoreHelper
+const testConstants = require('./tests.constants.spec')
 
-const appId = 'com.nssu.test'
-const countryCode = 'ca'
-const urlWithCountryCode = `https://itunes.apple.com/lookup?bundleId=${appId}&hl=${countryCode}`
-const urlWithoutCountryCode = `https://itunes.apple.com/lookup?bundleId=${appId}`
-const validResource = {
-  resultCount: 3,
-  results: [1, 2, 3]
-}
-const nonValidResource = {
-  resultCount: 0
-}
-
-describe('AppStoreHelper ', function() {
-  describe('_getItunesLookupUrl function', function() {
-    it('should return proper Url', function() {
-      expect(AppStoreHelper._getItunesLookupUrl(appId, countryCode)).toEqual(urlWithCountryCode)
+describe('AppStoreHelper ', () => {
+  describe('_getItunesLookupUrl function', () => {
+    it('should return proper Url', () => {
+      expect(AppStoreHelper._getItunesLookupUrl(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode
+      )).toEqual(testConstants.ios.urlWithCountryCode)
     })
 
-    it('should return url without country code if not provided', function() {
-      expect(AppStoreHelper._getItunesLookupUrl(appId)).toEqual(urlWithoutCountryCode)
+    it('should return url without country code if not provided', () => {
+      expect(AppStoreHelper._getItunesLookupUrl(testConstants.environment.appId))
+        .toEqual(testConstants.ios.urlWithoutCountryCode)
     })
   })
 
-  describe('_parseResource function', function() {
-    it('should return first available resource', function() {
-      expect(AppStoreHelper._parseResource(validResource)).toEqual(validResource.results[0])
+  describe('_parseResource function', () => {
+    it('should return first available resource', () => {
+      expect(AppStoreHelper._parseResource(testConstants.ios.validResource))
+        .toEqual(testConstants.ios.validResource.results[0])
     })
 
-    it('should return null if result count = 0', function() {
-      expect(AppStoreHelper._parseResource(nonValidResource)).toBe(null)
+    it('should return null if result count = 0', () => {
+      expect(AppStoreHelper._parseResource(testConstants.ios.nonValidResource)).toBe(null)
     })
   })
 
-  describe('_getLookupFile function', function() {
-    it('return fetch with itunesStore lookup url', function() {
+  describe('_getLookupFile function', () => {
+    it('return fetch with itunesStore lookup url', () => {
       const returnValue = 'Success'
       spyOn(global, 'fetch').and.returnValue(returnValue)
-      expect(AppStoreHelper._getLookupFile(appId, countryCode)).toEqual(returnValue)
-      expect(global.fetch).toHaveBeenCalledWith(urlWithCountryCode)
+      expect(AppStoreHelper._getLookupFile(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode
+      )).toEqual(returnValue)
+      expect(global.fetch).toHaveBeenCalledWith(testConstants.ios.urlWithCountryCode)
     })
   })
 
-  describe('getAppInfos function', function() {
-    it('Should return first result', function() {
+  describe('getAppInfos function', () => {
+    it('Should return first result', () => {
       const response = {
         status: 200,
-        json: () => validResource
+        json: () => testConstants.ios.validResource
       }
-      const returnValue = validResource.results[0]
+      const returnValue = testConstants.ios.validResource.results[0]
       spyOn(global, 'fetch').and.returnValue(Promise.resolve(response))
-      AppStoreHelper.getAppInfos(appId, countryCode)
-      .then(result => {
+      AppStoreHelper.getAppInfos(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode
+      ).then(result => {
         expect(result).toEqual(returnValue)
       })
     })

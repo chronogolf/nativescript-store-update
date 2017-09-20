@@ -1,21 +1,16 @@
 const StoreUpdate = require('nativescript-store-update')
 const ResponseHelper = StoreUpdate.ResponseHelper
+const testConstants = require('./tests.constants.spec')
 
-const validResponse = {
-  status: 200
-}
-const nonValidResponse = {
-  status: 404
-}
-
-describe('ResponseHelper ', function() {
-  describe('handleErrorStatus function', function() {
-    it('should return response if status is ok', function() {
-      expect(ResponseHelper.handleErrorStatus(validResponse)).toEqual(validResponse)
+describe('ResponseHelper ', () => {
+  describe('handleErrorStatus function', () => {
+    it('should return response if status is ok', () => {
+      expect(ResponseHelper.handleErrorStatus(testConstants.HTTPResponse.success))
+        .toEqual(testConstants.HTTPResponse.success)
     })
 
-    it('should raise an error if status is an error', function() {
-      expect(() => ResponseHelper.handleErrorStatus(nonValidResponse)).toThrow()
+    it('should raise an error if status is an error', () => {
+      expect(() => ResponseHelper.handleErrorStatus(testConstants.HTTPResponse.error)).toThrow()
     })
   })
 })

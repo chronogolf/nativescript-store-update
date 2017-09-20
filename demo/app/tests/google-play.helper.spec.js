@@ -1,60 +1,54 @@
 const StoreUpdate = require('nativescript-store-update')
 const GooglePlayHelper = StoreUpdate.GooglePlayHelper
+const testConstants = require('./tests.constants.spec')
 
-const appId = 'com.nssu.test'
-const countryCode = 'ca'
-const urlWithCountryCode = `https://play.google.com/store/apps/details?id=${appId}&hl=${countryCode}`
-const urlWithoutCountryCode = `https://play.google.com/store/apps/details?id=${appId}`
-const storePage = `
-<div>
-  <div><div itemprop="datePublished">12 Sept 2017</div></div>
-  <div><div itemprop="operatingSystems">4.2 and beyond</div></div>
-  <div><div itemprop="softwareVersion">1.2.3</div></div>
-</div>
-`
-const storeParsedPage = {
-  date: '12 Sept 2017',
-  os: '4.2',
-  version: '1.2.3',
-}
-
-describe('GooglePlayHelper ', function() {
-  describe('_getStoreAppUrl function', function() {
-    it('should return proper Url', function() {
-      expect(GooglePlayHelper._getStoreAppUrl(appId, countryCode)).toEqual(urlWithCountryCode)
+describe('GooglePlayHelper ', () => {
+  describe('_getStoreAppUrl function', () => {
+    it('should return proper Url', () => {
+      expect(GooglePlayHelper._getStoreAppUrl(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode
+      )).toEqual(testConstants.android.urlWithCountryCode)
     })
 
-    it('should return url without country code if not provided', function() {
-      expect(GooglePlayHelper._getStoreAppUrl(appId)).toEqual(urlWithoutCountryCode)
+    it('should return url without country code if not provided', () => {
+      expect(GooglePlayHelper._getStoreAppUrl(testConstants.environment.appId))
+        .toEqual(testConstants.android.urlWithoutCountryCode)
     })
   })
 
-  describe('_parseResource function', function() {
-    it('should return parsed resource', function() {
-      expect(GooglePlayHelper._parseResource(storePage)).toEqual(storeParsedPage)
+  describe('_parseResource function', () => {
+    it('should return parsed resource', () => {
+      expect(GooglePlayHelper._parseResource(testConstants.android.storePage))
+        .toEqual(testConstants.android.storeParsedPage)
     })
   })
 
-  describe('_getAppPage function', function() {
-    it('return fetch with Google play lookup url', function() {
+  describe('_getAppPage function', () => {
+    it('return fetch with Google play lookup url', () => {
       const returnValue = 'Success'
       spyOn(global, 'fetch').and.returnValue(returnValue)
-      expect(GooglePlayHelper._getAppPage(appId, countryCode)).toEqual(returnValue)
-      expect(global.fetch).toHaveBeenCalledWith(urlWithCountryCode)
+      expect(GooglePlayHelper._getAppPage(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode)
+      ).toEqual(returnValue)
+      expect(global.fetch).toHaveBeenCalledWith(testConstants.android.urlWithCountryCode)
     })
   })
 
-  describe('getAppInfos function', function() {
-    it('TOFIX - Should return first result', function() {
+  describe('getAppInfos function', () => {
+    it('TOFIX - Should return first result', () => {
       const response = {
         status: 200,
-        text: () => storePage
+        text: () => testConstants.android.storePage
       }
       spyOn(global, 'fetch').and.returnValue(Promise.resolve(response))
-      GooglePlayHelper.getAppInfos(appId, countryCode)
-        .then(result => {
-          expect(result).toEqual(storeParsedPage)
-        })
+      GooglePlayHelper.getAppInfos(
+        testConstants.environment.appId,
+        testConstants.environment.countryCode
+      ).then(result => {
+        expect(result).toEqual(testConstants.android.storeParsedPage)
+      })
     })
   })
 })
