@@ -1,6 +1,7 @@
 const moment = require('moment')
 const StoreUpdateModule = require('nativescript-store-update')
 const appSettings = require('tns-core-modules/application-settings')
+const dialogs = require('tns-core-modules/ui/dialogs')
 const StoreUpdate = StoreUpdateModule.StoreUpdate
 const UpdateTypesConstants = StoreUpdateModule.UpdateTypesConstants
 const AlertTypesConstants = StoreUpdateModule.AlertTypesConstants
@@ -9,7 +10,7 @@ const config = {
   majorUpdateAlertType: AlertTypesConstants.FORCE,
   minorUpdateAlertType: AlertTypesConstants.OPTION,
   patchUpdateAlertType: AlertTypesConstants.NONE,
-  revisionUpdateAlertType: AlertTypesConstants.NONE,
+  revisionUpdateAlertType: AlertTypesConstants.OPTION,
   notifyNbDaysAfterRelease: 2,
   countryCode: 'ca',
 }
@@ -57,6 +58,34 @@ describe('StoreUpdate ', () => {
       expect(StoreUpdate._countryCode).toEqual(config.countryCode)
     })
 
+  })
+
+  describe('_showAlertForUpdate function', () => {
+    beforeAll(() => {
+      spyOn(dialogs, 'confirm').and.returnValue(Promise.resolve())
+    })
+    it('should display config majorUpdateAlertType confirm for major update', () => {
+      const skippable = config.majorUpdateAlertType !== AlertTypesConstants.FORCE
+      const expectedOptions = StoreUpdate._buildDialogOptions({ skippable })
+      StoreUpdate._showAlertForUpdate('2.1.1.1')
+      expect(dialogs.confirm).toHaveBeenCalledWith(expectedOptions)
+    })
+    it('should display config minorUpdateAlertType confirm for minor update', () => {
+      const skippable = config.minorUpdateAlertType !== AlertTypesConstants.FORCE
+      const expectedOptions = StoreUpdate._buildDialogOptions({ skippable })
+      StoreUpdate._showAlertForUpdate('1.2.1.1')
+      expect(dialogs.confirm).toHaveBeenCalledWith(expectedOptions)
+    })
+    it('should not display confirm for config PatchUpdate version', () => {
+      StoreUpdate._showAlertForUpdate('1.1.2.1')
+      .catch(err => expect(err).toEqual(null))
+    })
+    it('should display config revisionUpdateAlertType confirm for minor update', () => {
+      const skippable = config.revisionUpdateAlertType !== AlertTypesConstants.FORCE
+      const expectedOptions = StoreUpdate._buildDialogOptions({ skippable })
+      StoreUpdate._showAlertForUpdate('1.1.1.2')
+      expect(dialogs.confirm).toHaveBeenCalledWith(expectedOptions)
+    })
   })
 
   describe('_getUpdateTypeForVersion function', () => {
