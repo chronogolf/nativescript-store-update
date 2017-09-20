@@ -51,10 +51,8 @@ describe('GooglePlayHelper ', function() {
         text: () => storePage
       }
       spyOn(global, 'fetch').and.returnValue(Promise.resolve(response))
-      console.dir(response)
       GooglePlayHelper.getAppInfos(appId, countryCode)
         .then(result => {
-          console.dir(result)
           expect(result).toEqual(storeParsedPage)
         })
     })
