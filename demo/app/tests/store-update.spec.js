@@ -3,6 +3,7 @@ const StoreUpdateModule = require('nativescript-store-update')
 const appSettings = require('tns-core-modules/application-settings')
 const dialogs = require('tns-core-modules/ui/dialogs')
 const StoreUpdate = StoreUpdateModule.StoreUpdate
+const LocalesHelper = StoreUpdateModule.LocalesHelper
 const UpdateTypesConstants = StoreUpdateModule.UpdateTypesConstants
 const AlertTypesConstants = StoreUpdateModule.AlertTypesConstants
 
@@ -58,6 +59,27 @@ describe('StoreUpdate ', () => {
       expect(StoreUpdate._countryCode).toEqual(config.countryCode)
     })
 
+  })
+
+  describe('_buildDialogOptions function', () => {
+    const defaultOptions = options = {
+      message: LocalesHelper.translate('ALERT_MESSAGE'),
+      neutralButtonText: null,
+      okButtonText: LocalesHelper.translate('ALERT_UPDATE_BUTTON'),
+      title: LocalesHelper.translate('ALERT_TITLE'),
+    }
+    const skippableOptions = Object.assign({}, defaultOptions, {
+      neutralButtonText: LocalesHelper.translate('ALERT_SKIP_BUTTON'),
+    })
+    it('should return options with neutralButtonText by default', () => {
+      expect(StoreUpdate._buildDialogOptions()).toEqual(skippableOptions)
+    })
+    it('should return options with neutralButtonText if skippable is true', () => {
+      expect(StoreUpdate._buildDialogOptions({ skippable: true })).toEqual(skippableOptions)
+    })
+    it('should return options without neutralButtonText if skippable is false', () => {
+      expect(StoreUpdate._buildDialogOptions({ skippable: false })).toEqual(defaultOptions)
+    })
   })
 
   describe('_showAlertForUpdate function', () => {
