@@ -50,10 +50,4 @@ export class StoreUpdate extends StoreUpdateCommon {
       version: result.version,
     }
   }
-
-  private static _triggerAlertIfEligible(result) {
-    if (StoreUpdate._isEligibleForUpdate(result)) {
-      StoreUpdate._triggerAlertForUpdate(result.version)
-    }
-  }
 }

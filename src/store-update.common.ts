@@ -149,6 +149,12 @@ export class StoreUpdateCommon {
     }
   }
 
+  protected static _triggerAlertIfEligible(result) {
+    if (this._isEligibleForUpdate(result)) {
+      this._triggerAlertForUpdate(result.version)
+    }
+  }
+
   /*
    *  Private
    */

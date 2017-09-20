@@ -45,9 +45,4 @@ export class StoreUpdate extends StoreUpdateCommon {
       systemVersion: UIDevice.currentDevice.systemVersion,
     }
   }
-
-  private static _triggerAlertIfEligible(result) {
-    if (!StoreUpdate._isEligibleForUpdate(result)) return
-    StoreUpdate._triggerAlertForUpdate(result.version)
-  }
 }

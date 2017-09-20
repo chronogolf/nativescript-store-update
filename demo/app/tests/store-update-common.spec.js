@@ -285,6 +285,32 @@ describe('StoreUpdate ', () => {
     })
   })
 
+  describe('_triggerAlertIfEligible function', () => {
+    const results = {
+      bundleId: 'com.bitstrips.imoji',
+      trackId: 12,
+      version: '2.1.1.1',
+      minimumOsVersion: '1.0',
+      currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+      systemVersion: UIDevice.currentDevice.systemVersion,
+    }
+
+    it('should call _triggerAlertForUpdate if new valid version is available', () => {
+      spyOn(StoreUpdate, '_triggerAlertForUpdate')
+      StoreUpdate._triggerAlertIfEligible(results)
+      expect(StoreUpdate._triggerAlertForUpdate).toHaveBeenCalled()
+    })
+
+    it('should not call _triggerAlertForUpdate if no new valid version is available', () => {
+      const invalidResults = Object.assign(results, {
+        version: '0.0.0.1',
+      })
+      spyOn(StoreUpdate, '_triggerAlertForUpdate')
+      StoreUpdate._triggerAlertIfEligible(results)
+      expect(StoreUpdate._triggerAlertForUpdate).not.toHaveBeenCalled()
+    })
+  })
+
   describe('_isAppStoreVersionNewer function', () => {
     it('should return true if store version is superior to local', () => {
       expect(StoreUpdate._isAppStoreVersionNewer('2.1.1.1')).toBe(true)

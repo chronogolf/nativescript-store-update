@@ -12,6 +12,6 @@ export declare class StoreUpdate extends StoreUpdateCommon {
     static getBundleId(): string;
     static getLocalVersionNumber(): string;
     private static _extendResults(result);
-    private static _triggerAlertIfEligible(result);
+    protected static _triggerAlertIfEligible(result);
     protected static _openStore(): void;
 }
