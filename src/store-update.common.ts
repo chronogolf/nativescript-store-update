@@ -96,31 +96,24 @@ export class StoreUpdateCommon {
   }
 
   protected static _getAlertTypeForVersion(currentAppStoreVersion: string): number {
-    let alertType = AlertTypesConstants.OPTION
-
     const updateType = this._getUpdateTypeForVersion(currentAppStoreVersion)
+
     switch (updateType) {
       case UpdateTypesConstants.MAJOR: {
-        alertType = this._majorUpdateAlertType
-        break
+        return this._majorUpdateAlertType
       }
       case UpdateTypesConstants.MINOR: {
-        alertType = this._minorUpdateAlertType
-        break
+        return this._minorUpdateAlertType
       }
       case UpdateTypesConstants.PATCH: {
-        alertType = this._patchUpdateAlertType
-        break
+        return this._patchUpdateAlertType
       }
       case UpdateTypesConstants.REVISION: {
-        alertType = this._revisionUpdateAlertType
-        break
+        return this._revisionUpdateAlertType
       }
       default:
-        break
+        return AlertTypesConstants.OPTION
     }
-
-    return alertType
   }
 
   protected static _buildDialogOptions({ skippable = true } = {}): ConfirmOptions {

@@ -61,6 +61,21 @@ describe('StoreUpdate ', () => {
 
   })
 
+  describe('_getAlertTypeForVersion function', () => {
+    it('should return config majorUpdateAlertType for major update', () => {
+      expect(StoreUpdate._getAlertTypeForVersion('2.1.1.1')).toEqual(config.majorUpdateAlertType)
+    })
+    it('should return config minorUpdateAlertType for minor update', () => {
+      expect(StoreUpdate._getAlertTypeForVersion('1.2.1.1')).toEqual(config.minorUpdateAlertType)
+    })
+    it('should return config patchUpdateAlertType for major update', () => {
+      expect(StoreUpdate._getAlertTypeForVersion('1.1.2.1')).toEqual(config.patchUpdateAlertType)
+    })
+    it('should return config revisionUpdateAlertType for major update', () => {
+      expect(StoreUpdate._getAlertTypeForVersion('1.1.1.2')).toEqual(config.revisionUpdateAlertType)
+    })
+  })
+
   describe('_buildDialogOptions function', () => {
     const defaultOptions = options = {
       message: LocalesHelper.translate('ALERT_MESSAGE'),
