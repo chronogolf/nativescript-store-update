@@ -61,6 +61,64 @@ describe('StoreUpdate ', () => {
 
   })
 
+  describe('_isEligibleForUpdate function', () => {
+    beforeAll(() => {
+      spyOn(appSettings, 'setString')
+    })
+    it('should return true if new version released for long enough matching OS min versions', () => {
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '2.2.2.2',
+        currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+        minimumOsVersion: '1',
+        systemVersion: '1',
+      })).toBe(true)
+    })
+    it('should return false if store version is older than local', () => {
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '0.2.2.2',
+        currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+        minimumOsVersion: '1',
+        systemVersion: '1',
+      })).toBe(false)
+    })
+    it('should return false if store version is equal to local', () => {
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '1.1.1.1',
+        currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+        minimumOsVersion: '1',
+        systemVersion: '1',
+      })).toBe(false)
+    })
+    it('should return false if release date is too close', () => {
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '2.2.2.2',
+        currentVersionReleaseDate: moment().toDate(),
+        minimumOsVersion: '1',
+        systemVersion: '1',
+      })).toBe(false)
+    })
+    it('should return false if os version is under min version required', () => {
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '2.2.2.2',
+        currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+        minimumOsVersion: '2',
+        systemVersion: '1',
+      })).toBe(false)
+    })
+    it('should return false if os version is under min version required', () => {
+      StoreUpdate._setVersionAsSkipped('2.2.2.2')
+      expect(StoreUpdate._isEligibleForUpdate({
+        version: '2.2.2.2',
+        currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
+        minimumOsVersion: '2',
+        systemVersion: '1',
+      })).toBe(false)
+    })
+    afterAll(() => {
+      appSettings.remove('lastVersionSkipped')
+    })
+  })
+
   describe('_setVersionAsSkipped function', () => {
     beforeAll(() => {
       spyOn(appSettings, 'setString')
