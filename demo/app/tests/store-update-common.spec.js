@@ -2,6 +2,7 @@ const moment = require('moment')
 const StoreUpdateModule = require('nativescript-store-update')
 const appSettings = require('tns-core-modules/application-settings')
 const dialogs = require('tns-core-modules/ui/dialogs')
+const platform = require('tns-core-modules/platform')
 const StoreUpdate = StoreUpdateModule.StoreUpdate
 const LocalesHelper = StoreUpdateModule.LocalesHelper
 const UpdateTypesConstants = StoreUpdateModule.UpdateTypesConstants
@@ -286,13 +287,16 @@ describe('StoreUpdate ', () => {
   })
 
   describe('_triggerAlertIfEligible function', () => {
+    const systemVersion = platform.isIOS ?
+      UIDevice.currentDevice.systemVersion :
+      android.os.Build.VERSION.RELEASE
     const results = {
       bundleId: 'com.bitstrips.imoji',
       trackId: 12,
       version: '2.1.1.1',
       minimumOsVersion: '1.0',
       currentVersionReleaseDate: moment().subtract(3, 'days').toDate(),
-      systemVersion: UIDevice.currentDevice.systemVersion,
+      systemVersion
     }
 
     it('should call _triggerAlertForUpdate if new valid version is available', () => {
