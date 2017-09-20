@@ -61,6 +61,25 @@ describe('StoreUpdate ', () => {
 
   })
 
+  describe('_triggerAlertForUpdate function', () => {
+    beforeAll(() => {
+      spyOn(StoreUpdate, '_openStore')
+      spyOn(StoreUpdate, '_setVersionAsSkipped')
+    })
+    it('should open store if confirmed', () => {
+      spyOn(dialogs, 'confirm').and.returnValue(Promise.resolve(true))
+      StoreUpdate._triggerAlertForUpdate('1.2.1.1').then(() => {
+        expect(StoreUpdate._openStore).toHaveBeenCalled()
+      })
+    })
+    it('should skip version if not confirmed', () => {
+      spyOn(dialogs, 'confirm').and.returnValue(Promise.resolve(false))
+      StoreUpdate._triggerAlertForUpdate('1.2.1.1').then(() => {
+        expect(StoreUpdate._setVersionAsSkipped).toHaveBeenCalled()
+      })
+    })
+  })
+
   describe('_getAlertTypeForVersion function', () => {
     it('should return config majorUpdateAlertType for major update', () => {
       expect(StoreUpdate._getAlertTypeForVersion('2.1.1.1')).toEqual(config.majorUpdateAlertType)

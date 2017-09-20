@@ -89,7 +89,7 @@ export class StoreUpdateCommon {
   }
 
   protected static _triggerAlertForUpdate(version: string) {
-    this._showAlertForUpdate(version).then((confirmed: boolean) => {
+    return this._showAlertForUpdate(version).then((confirmed: boolean) => {
       if (confirmed) this._openStore()
       else this._setVersionAsSkipped(version)
     })
