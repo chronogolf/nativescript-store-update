@@ -61,6 +61,18 @@ describe('StoreUpdate ', () => {
 
   })
 
+  describe('getBundleId function', () => {
+    it('should return appId', () => {
+      expect(StoreUpdate.getBundleId()).toEqual('com.bitstrips.imoji')
+    })
+  })
+
+  describe('getLocalVersionNumber function', () => {
+    it('should return app version', () => {
+      expect(StoreUpdate.getLocalVersionNumber()).toEqual('1.1.1.1')
+    })
+  })
+
   describe('_isEligibleForUpdate function', () => {
     beforeAll(() => {
       spyOn(appSettings, 'setString')
