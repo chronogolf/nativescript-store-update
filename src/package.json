@@ -32,10 +32,13 @@
   "keywords": [
     "NativeScript",
     "TypeScript",
+    "JavaScript",
     "Android",
     "iOS",
     "Update",
-    "Store"
+    "Store",
+    "App Store",
+    "Chronogolf"
   ],
   "author": {
     "name": "Chronogolf",
