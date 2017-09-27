@@ -4,12 +4,13 @@ const testConstants = require('./tests.constants.spec')
 
 describe('ResponseHelper ', () => {
   describe('handleErrorStatus function', () => {
-    it('should return response if status is ok', () => {
-      expect(ResponseHelper.handleErrorStatus(testConstants.HTTPResponse.success))
-        .toEqual(testConstants.HTTPResponse.success)
+    it('returns response if status is ok', () => {
+      expect(ResponseHelper.handleErrorStatus(testConstants.HTTPResponse.success)).toEqual(
+        testConstants.HTTPResponse.success
+      )
     })
 
-    it('should raise an error if status is an error', () => {
+    it('raises an error if status is an error', () => {
       expect(() => ResponseHelper.handleErrorStatus(testConstants.HTTPResponse.error)).toThrow()
     })
   })

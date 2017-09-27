@@ -14,7 +14,7 @@ describe('StoreUpdate IOS ', () => {
   })
 
   describe('_openStore function', () => {
-    it('should open store page', () => {
+    it('opens store page', () => {
       const storeURL = NSURL.URLWithString(testConstants.ios.storeURL).absoluteString
       spyOn(utils, 'openUrl')
       StoreUpdate._openStore()
@@ -23,7 +23,7 @@ describe('StoreUpdate IOS ', () => {
   })
 
   describe('_extendResults function', () => {
-    it('should return formated results', () => {
+    it('returns formated results', () => {
       const results = {
         bundleId: testConstants.environment.appId,
         trackId: 12,
@@ -31,9 +31,12 @@ describe('StoreUpdate IOS ', () => {
         minimumOsVersion: testConstants.environment.osVersion,
         currentVersionReleaseDate: testConstants.dates.today.toDate(),
       }
-      const extendedResults = Object.assign({
-        systemVersion: testConstants.environment.osVersion,
-      }, results)
+      const extendedResults = Object.assign(
+        {
+          systemVersion: testConstants.environment.osVersion,
+        },
+        results
+      )
       expect(StoreUpdate._extendResults(results)).toEqual(extendedResults)
     })
   })

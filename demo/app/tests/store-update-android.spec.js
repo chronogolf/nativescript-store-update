@@ -14,7 +14,7 @@ describe('StoreUpdate ANDROID ', () => {
   })
 
   describe('_openStore function', () => {
-    it('should open store page', () => {
+    it('opens store page', () => {
       spyOn(utils, 'openUrl')
       StoreUpdate._openStore()
       expect(utils.openUrl).toHaveBeenCalledWith(testConstants.android.storeURL)
@@ -22,7 +22,7 @@ describe('StoreUpdate ANDROID ', () => {
   })
 
   describe('_extendResults function', () => {
-    it('should return formated results', () => {
+    it('returns formated results', () => {
       const results = {
         version: testConstants.environment.appVersion,
         os: testConstants.environment.osVersion,
