@@ -1,4 +1,6 @@
-﻿import './bundle-config'
+﻿/* tslint:disable */
+import './bundle-config'
+/* tslint:enable */
 
 import { AlertTypesConstants, StoreUpdate } from 'nativescript-store-update'
 import * as application from 'tns-core-modules/application'

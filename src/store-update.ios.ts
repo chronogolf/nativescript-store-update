@@ -7,6 +7,8 @@ import { StoreUpdateCommon } from './store-update.common'
 import { ForegroundDelegage } from './store-update.delegate'
 
 export * from './constants'
+export * from './helpers'
+export * from './interfaces'
 
 app.ios.delegate = ForegroundDelegage
 
@@ -42,10 +44,5 @@ export class StoreUpdate extends StoreUpdateCommon {
       ...result,
       systemVersion: UIDevice.currentDevice.systemVersion,
     }
-  }
-
-  private static _triggerAlertIfEligible(result) {
-    if (!StoreUpdate._isEligibleForUpdate(result)) return
-    StoreUpdate._triggerAlertForUpdate(result.version)
   }
 }

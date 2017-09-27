@@ -35,6 +35,7 @@
         ],
         "no-console": [false],
         "only-arrow-functions": [false],
+        "no-submodule-imports": false,
         "no-var-requires": false,
         "variable-name": [
             true,
