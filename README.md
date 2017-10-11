@@ -1,20 +1,22 @@
 # Nativescript-store-update
 
-Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
+This plugin allows you to define a notification strategy regarding your app updates. You are able to specify if you want to force, offer or ignore an update based on the new version available in the platform store.
 
-Then describe what's the purpose of your plugin.
+For example, you could want to force all major version update, but offer the option to your user to chose to update or skip a minor or patch version.
 
-In case you develop UI plugin, this is where you can add some screenshots.
+You can also specify how many days after the update release you want to display the alert.
 
-## (Optional) Prerequisites / Requirements
+## Prerequisites
 
-Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
+You need to add i18n and appversion plugins for this one to work:
+```zsh
+tns plugin add nativescript-appversion
+tns plugin add nativescript-i18n
+```
 
 ## Installation
 
 ```zsh
-tns plugin add nativescript-appversion
-tns plugin add nativescript-i18n
 tns plugin add nativescript-store-update
 ```
 
