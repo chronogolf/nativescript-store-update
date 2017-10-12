@@ -43,10 +43,10 @@ Translations are handled via json files which are located in `src/i18n` folder a
 ### Configuration options
 | Property | Default | Description |
 | --- | --- | --- |
-| **majorUpdateAlertType** | FORCE | Alert type for major version change |
-| **minorUpdateAlertType** | OPTION | Alert type for minor version change |
-| **majorUpdateAlertType** | NONE | Alert type for major version change |
-| **revisionUpdateAlertType** | NONE | Alert type for revision version change |
+| **majorUpdateAlertType** | FORCE | Alert type for major version change (e.g: A.b.c.d) |
+| **minorUpdateAlertType** | OPTION | Alert type for minor version change (e.g: a.B.c.d) |
+| **majorUpdateAlertType** | NONE | Alert type for major version change (e.g: a.b.C.d) |
+| **revisionUpdateAlertType** | NONE | Alert type for revision version change (e.g: a.b.c.D) |
 | **notifyNbDaysAfterRelease** | `1` | Delays the update prompt by a specific number of days |
 | **countryCode** | `en` | country store code |
 
