@@ -6,7 +6,7 @@ import * as appSettings from 'tns-core-modules/application-settings'
 import { Observable } from 'tns-core-modules/data/observable'
 import { device } from 'tns-core-modules/platform'
 
-import { getAppIdSync, getVersionNameSync } from 'nativescript-appversion'
+import { getAppIdSync, getVersionCodeSync, getVersionNameSync } from 'nativescript-appversion'
 import { confirm, ConfirmOptions } from 'tns-core-modules/ui/dialogs'
 
 import { AlertTypesConstants, UpdateTypesConstants } from './constants'
@@ -60,7 +60,7 @@ export class StoreUpdateCommon {
   }
 
   static getLocalVersionNumber(): string {
-    return getVersionNameSync()
+    return `${getVersionNameSync()}.${getVersionCodeSync()}`
   }
 
   /*
