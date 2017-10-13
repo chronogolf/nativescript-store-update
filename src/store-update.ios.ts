@@ -13,8 +13,7 @@ export * from './interfaces'
 app.ios.delegate = ForegroundDelegage
 
 export class StoreUpdate extends StoreUpdateCommon {
-  private static _storeUpdateCommon
-  private static _instantiated = false
+  private static _common
   private static _trackViewUrl
 
   /*
@@ -22,24 +21,18 @@ export class StoreUpdate extends StoreUpdateCommon {
   */
 
   static init(config: IStoreUpdateConfig) {
-    if (StoreUpdate._instantiated) throw new Error('NS Store Update already configured')
-    StoreUpdate._storeUpdateCommon = new StoreUpdateCommon({
+    if (StoreUpdate._common) throw new Error('NS Store Update already configured')
+    StoreUpdate._common = new StoreUpdateCommon({
       ...config,
       onConfirmed: StoreUpdate._openStore.bind(StoreUpdate),
     })
-    StoreUpdate._instantiated = true
   }
 
   static checkForUpdate() {
-    if (!StoreUpdate._instantiated) return
-    AppStoreHelper.getAppInfos(
-      StoreUpdate._storeUpdateCommon.getBundleId(),
-      StoreUpdate._storeUpdateCommon.countryCode
-    )
+    if (!StoreUpdate._common) return
+    AppStoreHelper.getAppInfos(StoreUpdate._common.getBundleId(), StoreUpdate._common.countryCode)
       .then(StoreUpdate._extendResults)
-      .then(
-        StoreUpdate._storeUpdateCommon.triggerAlertIfEligible.bind(StoreUpdate._storeUpdateCommon)
-      )
+      .then(StoreUpdate._common.triggerAlertIfEligible.bind(StoreUpdate._common))
       .catch(e => console.error(e))
   }
 

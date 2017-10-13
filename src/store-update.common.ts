@@ -26,7 +26,6 @@ const defaultConfig: IStoreUpdateConfig = {
 }
 
 export class StoreUpdateCommon {
-  instantiated = false
   countryCode
 
   private _majorUpdateAlertType
