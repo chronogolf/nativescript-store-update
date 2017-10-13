@@ -13,19 +13,30 @@ app.on(app.resumeEvent, () => {
   StoreUpdate.checkForUpdate()
 })
 
-export class StoreUpdate extends StoreUpdateCommon {
-  private static _checkHasTimeouted = false
-  private static _timeoutChecker
-  private static _looperChecker
+export class StoreUpdate {
+  private static _storeUpdateCommon
+  private static _instantiated = false
 
   /*
-   *  Public
-   */
+  *  Public
+  */
+
+  static init(config: IStoreUpdateConfig) {
+    if (StoreUpdate._instantiated) throw new Error('NS Store Update already configured')
+    StoreUpdate._storeUpdateCommon = new StoreUpdateCommon({
+      ...config,
+      onConfirmed: StoreUpdate._openStore.bind(StoreUpdate),
+    })
+    StoreUpdate._instantiated = true
+  }
 
   static checkForUpdate() {
-    GooglePlayHelper.getAppInfos(StoreUpdate.getBundleId())
+    if (!StoreUpdate._instantiated) return
+    GooglePlayHelper.getAppInfos(StoreUpdate._storeUpdateCommon.getBundleId())
       .then(StoreUpdate._extendResults)
-      .then(StoreUpdate._triggerAlertIfEligible.bind(StoreUpdate))
+      .then(
+        StoreUpdate._storeUpdateCommon.triggerAlertIfEligible.bind(StoreUpdate._storeUpdateCommon)
+      )
       .catch(console.error)
   }
 
@@ -34,7 +45,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    */
 
   protected static _openStore() {
-    const storeUrl = `market://details?id=${StoreUpdate.getBundleId()}`
+    const storeUrl = `market://details?id=${StoreUpdate._storeUpdateCommon.getBundleId()}`
     utils.openUrl(storeUrl)
   }
 

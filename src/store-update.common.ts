@@ -22,80 +22,67 @@ const defaultConfig: IStoreUpdateConfig = {
   notifyNbDaysAfterRelease: 1,
   patchUpdateAlertType: AlertTypesConstants.NONE,
   revisionUpdateAlertType: AlertTypesConstants.NONE,
+  onConfirmed: () => console.log('User confirmed!'),
 }
 
 export class StoreUpdateCommon {
-  static instatiated = false
+  instantiated = false
+  countryCode
 
-  protected static _countryCode
+  private _majorUpdateAlertType
+  private _minorUpdateAlertType
+  private _patchUpdateAlertType
+  private _revisionUpdateAlertType
+  private _notifyNbDaysAfterRelease
+  private _onConfirmed
 
-  private static _majorUpdateAlertType
-  private static _minorUpdateAlertType
-  private static _patchUpdateAlertType
-  private static _revisionUpdateAlertType
-  private static _notifyNbDaysAfterRelease
+  constructor(config?: IStoreUpdateConfig) {
+    if (config) this._init(config)
+  }
 
   /*
    *  Public
    */
 
-  static init(config: IStoreUpdateConfig) {
-    if (this.instatiated) return
-    const conf = {
-      ...defaultConfig,
-      ...config,
-    }
-    this.instatiated = true
-    this._majorUpdateAlertType = conf.majorUpdateAlertType
-    this._minorUpdateAlertType = conf.minorUpdateAlertType
-    this._patchUpdateAlertType = conf.patchUpdateAlertType
-    this._revisionUpdateAlertType = conf.revisionUpdateAlertType
-    this._notifyNbDaysAfterRelease = conf.notifyNbDaysAfterRelease
-    this._countryCode = conf.countryCode
-    LocalesHelper.changeLang(device.language)
-  }
-
-  static getBundleId(): string {
+  getBundleId(): string {
     return getAppIdSync()
   }
 
-  static getLocalVersionNumber(): string {
+  getLocalVersionNumber(): string {
     return `${getVersionNameSync()}.${getVersionCodeSync()}`
   }
 
-  /*
-   *  Protected
-   */
-
-  protected static _isEligibleForUpdate({
+  isEligibleForUpdate({
     version,
     currentVersionReleaseDate,
     minimumOsVersion,
     systemVersion,
   }): boolean {
-    if (!this._isUpdateCompatibleWithDeviceOS(systemVersion, minimumOsVersion)) return false
+    if (!this._isUpdateCompatibleWithDeviceOS(systemVersion, minimumOsVersion)) {
+      return false
+    }
     if (!this._hasBeenReleasedLongerThanDelay(currentVersionReleaseDate)) return false
     if (this._isCurrentVersionSkipped(version)) return false
     if (!this._isAppStoreVersionNewer(version)) return false
     return true
   }
 
-  protected static _openStore() {
+  openStore() {
     // Overriden by platforms
   }
 
-  protected static _setVersionAsSkipped(version: string) {
+  setVersionAsSkipped(version: string) {
     appSettings.setString(LAST_VERSION_SKIPPED_KEY, version)
   }
 
-  protected static _triggerAlertForUpdate(version: string) {
-    return this._showAlertForUpdate(version).then((confirmed: boolean) => {
-      if (confirmed) this._openStore()
-      else this._setVersionAsSkipped(version)
+  triggerAlertForUpdate(version: string) {
+    return this.showAlertForUpdate(version).then((confirmed: boolean) => {
+      if (confirmed) this._onConfirmed()
+      else this.setVersionAsSkipped(version)
     })
   }
 
-  protected static _getAlertTypeForVersion(currentAppStoreVersion: string): number {
+  getAlertTypeForVersion(currentAppStoreVersion: string): number {
     const updateType = this._getUpdateTypeForVersion(currentAppStoreVersion)
 
     switch (updateType) {
@@ -116,7 +103,7 @@ export class StoreUpdateCommon {
     }
   }
 
-  protected static _buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
+  buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
     let options = {
       message: LocalesHelper.translate('ALERT_MESSAGE'),
       neutralButtonText: null,
@@ -133,15 +120,15 @@ export class StoreUpdateCommon {
     return options
   }
 
-  protected static _showAlertForUpdate(version: string): Promise<boolean> {
-    const alertType = this._getAlertTypeForVersion(version)
+  showAlertForUpdate(version: string): Promise<boolean> {
+    const alertType = this.getAlertTypeForVersion(version)
     switch (alertType) {
       case AlertTypesConstants.FORCE: {
-        const options: ConfirmOptions = this._buildDialogOptions({ skippable: false })
+        const options: ConfirmOptions = this.buildDialogOptions({ skippable: false })
         return confirm(options)
       }
       case AlertTypesConstants.OPTION: {
-        const options: ConfirmOptions = this._buildDialogOptions()
+        const options: ConfirmOptions = this.buildDialogOptions()
         return confirm(options)
       }
       default:
@@ -149,9 +136,9 @@ export class StoreUpdateCommon {
     }
   }
 
-  protected static _triggerAlertIfEligible(result) {
-    if (this._isEligibleForUpdate(result)) {
-      this._triggerAlertForUpdate(result.version)
+  triggerAlertIfEligible(result) {
+    if (this.isEligibleForUpdate(result)) {
+      this.triggerAlertForUpdate(result.version)
     }
   }
 
@@ -159,17 +146,33 @@ export class StoreUpdateCommon {
    *  Private
    */
 
-  private static _isAppStoreVersionNewer(storeVersion: string): boolean {
+  private _init(config: IStoreUpdateConfig) {
+    const conf = {
+      ...defaultConfig,
+      ...config,
+    }
+
+    this._majorUpdateAlertType = conf.majorUpdateAlertType
+    this._minorUpdateAlertType = conf.minorUpdateAlertType
+    this._patchUpdateAlertType = conf.patchUpdateAlertType
+    this._revisionUpdateAlertType = conf.revisionUpdateAlertType
+    this._notifyNbDaysAfterRelease = conf.notifyNbDaysAfterRelease
+    this.countryCode = conf.countryCode
+    this._onConfirmed = conf.onConfirmed
+    LocalesHelper.changeLang(device.language)
+  }
+
+  private _isAppStoreVersionNewer(storeVersion: string): boolean {
     if (storeVersion === null) return false
     return VersionHelper.isHigher(storeVersion, this.getLocalVersionNumber())
   }
 
-  private static _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
+  private _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
     const lastVersionSkipped = appSettings.getString(LAST_VERSION_SKIPPED_KEY)
     return currentAppStoreVersion === lastVersionSkipped
   }
 
-  private static _hasBeenReleasedLongerThanDelay(releaseDate: string): boolean {
+  private _hasBeenReleasedLongerThanDelay(releaseDate: string): boolean {
     if (releaseDate === null) return false
 
     const daysSinceRelease = moment().diff(moment(new Date(releaseDate)), 'days')
@@ -184,7 +187,7 @@ export class StoreUpdateCommon {
     return daysSinceRelease >= this._notifyNbDaysAfterRelease
   }
 
-  private static _isUpdateCompatibleWithDeviceOS(
+  private _isUpdateCompatibleWithDeviceOS(
     deviceVersion: string,
     minimumRequiredOSVersion: string
   ): boolean {
@@ -195,7 +198,7 @@ export class StoreUpdateCommon {
     return isCompatible
   }
 
-  private static _getUpdateTypeForVersion(currentAppStoreVersion: string): number {
+  private _getUpdateTypeForVersion(currentAppStoreVersion: string): number {
     const localVersion = this.getLocalVersionNumber()
     if (VersionHelper.isMajorUpdate(currentAppStoreVersion, localVersion)) {
       return UpdateTypesConstants.MAJOR
