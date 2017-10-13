@@ -2,18 +2,18 @@
   "nativescript": {
     "id": "com.bitstrips.imoji",
     "tns-ios": {
-      "version": "3.1.0"
+      "version": "3.2.0"
     },
     "tns-android": {
-      "version": "3.1.1"
+      "version": "3.2.0"
     }
   },
   "dependencies": {
+    "moment": "2.18.1",
     "nativescript-appversion": "^1.4.1",
     "nativescript-store-update": "file:../src",
     "nativescript-unit-test-runner": "^0.3.4",
-    "tns-core-modules": "^3.1.1",
-    "moment": "2.18.1"
+    "tns-core-modules": "^3.2.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.1.3",
