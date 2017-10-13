@@ -4,6 +4,7 @@ export interface IAppleStoreResult {
   version: string
   minimumOsVersion: string
   currentVersionReleaseDate: string
+  trackViewUrl: string
 }
 
 /*

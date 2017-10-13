@@ -50,7 +50,7 @@ export class StoreUpdate extends StoreUpdateCommon {
   protected static _openStore() {
     // App Path
     utils.openUrl(
-      NSURL.URLWithString(`itms-apps://itunes.com/app/${StoreUpdate.getBundleId()}`).absoluteString
+      NSURL.URLWithString(`itms-apps${StoreUpdate._trackViewUrl.slice(5)}`).absoluteString
     )
   }
 
@@ -59,6 +59,7 @@ export class StoreUpdate extends StoreUpdateCommon {
    */
 
   private static _extendResults(result: IAppleStoreResult) {
+    StoreUpdate._trackViewUrl = result.trackViewUrl
     return {
       ...result,
       systemVersion: UIDevice.currentDevice.systemVersion,
