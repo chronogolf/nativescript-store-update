@@ -5,4 +5,5 @@ export interface IStoreUpdateConfig {
   revisionUpdateAlertType?: number
   notifyNbDaysAfterRelease?: number
   countryCode?: string
+  onConfirmed?: any
 }
