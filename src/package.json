@@ -10,10 +10,6 @@
       "ios": "3.0.0"
     }
   },
-  "nativescript-i18n": {
-    "defaultLang": "en",
-    "customLangPath": "i18n"
-  },
   "scripts": {
     "tsc": "tsc -skipLibCheck",
     "build": "npm i && tsc",
