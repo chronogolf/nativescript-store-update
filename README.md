@@ -8,10 +8,9 @@ You can also specify how many days after the update release you want to display 
 
 ## Prerequisites
 
-You need to add i18n and appversion plugins for this one to work:
+You need to add appversion plugins for this one to work:
 ```zsh
 tns plugin add nativescript-appversion
-tns plugin add nativescript-i18n
 ```
 
 ## Installation
