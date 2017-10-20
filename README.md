@@ -48,6 +48,7 @@ Translations are handled via json files which are located in `src/i18n` folder a
 | **revisionUpdateAlertType** | NONE | Alert type for revision version change (e.g: a.b.c.D) |
 | **notifyNbDaysAfterRelease** | `1` | Delays the update prompt by a specific number of days |
 | **countryCode** | `en` | country store code |
+| **alertOptions** | AlertOptions | Customize alert dialog text, bypasses the Locale json |
 
 ### Alert types
 | Key | Value | Description |
@@ -55,6 +56,15 @@ Translations are handled via json files which are located in `src/i18n` folder a
 | **FORCE** | `1` | Show an alert that can't be skipped |
 | **OPTION** | `2` | Show an alert that can be skipped |
 | **NONE** | `3` | Don't display alert at all |
+
+### AlertOptions configuration
+| Property | Default | Description |
+| --- | --- | --- |
+| **custom** | false | Use custom alerts |
+| **title** | LocaleText | Dialog title, fallback to the local json |
+| **message** | LocaleText | Dialog body text, fallback to the local json |
+| **updateButton** | LocaleText | Dialog update button, fallback to the local json |
+| **skipButton** | LocaleText | Dialog skip button, fallback to the local json |
 
 ## Development
 
