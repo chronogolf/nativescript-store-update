@@ -107,7 +107,7 @@ export class StoreUpdateCommon {
   buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
     let options = {
       title: this._getMessage('title', 'ALERT_TITLE'),
-      message: this._getMessage("message", 'ALERT_MESSAGE'),
+      message: this._getMessage('message', 'ALERT_MESSAGE'),
       neutralButtonText: null,
       okButtonText: this._getMessage('updateButton', 'ALERT_UPDATE_BUTTON'),
     }
@@ -127,7 +127,7 @@ export class StoreUpdateCommon {
   }
 
   private _hasValidAlertOptionEntry(key) {
-    if (!this._alertOptions)  return false
+    if (!this._alertOptions) return false
     return this._alertOptions.hasOwnProperty(key) && this._alertOptions[key] !== ''
   }
 
