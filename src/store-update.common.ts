@@ -22,9 +22,7 @@ const defaultConfig: IStoreUpdateConfig = {
   notifyNbDaysAfterRelease: 1,
   patchUpdateAlertType: AlertTypesConstants.NONE,
   revisionUpdateAlertType: AlertTypesConstants.NONE,
-  alertOptions: {
-    custom: false
-  },
+  alertOptions: null,
   onConfirmed: () => console.log('User confirmed!'),
 }
 
@@ -108,28 +106,29 @@ export class StoreUpdateCommon {
 
   buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
     let options = {
-      message: this.getMessage(this._alertOptions.message, LocalesHelper.translate('ALERT_MESSAGE')),
+      title: this._getMessage('title', 'ALERT_TITLE'),
+      message: this._getMessage("message", 'ALERT_MESSAGE'),
       neutralButtonText: null,
-      okButtonText: this.getMessage(this._alertOptions.updateButton, LocalesHelper.translate('ALERT_UPDATE_BUTTON')),
-      title: this.getMessage(this._alertOptions.title, LocalesHelper.translate('ALERT_TITLE')),
+      okButtonText: this._getMessage('updateButton', 'ALERT_UPDATE_BUTTON'),
     }
 
     if (skippable) {
       options = {
         ...options,
-        neutralButtonText: this.getMessage(this._alertOptions.skipButton, LocalesHelper.translate('ALERT_SKIP_BUTTON')),
+        neutralButtonText: this._getMessage('skipButton', 'ALERT_SKIP_BUTTON'),
       }
     }
 
     return options
   }
 
-  getMessage(text: string, fallback: string): string {
-    if (this._alertOptions && this._alertOptions.custom) {
-      return (text == "" || !text) ? fallback : text; //If the custom alert text is not set, return the fallback
-    } else {
-      return fallback;
-    }
+  private _getMessage(alertOptionKey: string, fallbackTranslateKey: string): string {
+    return this._hasValidAlertOptionEntry(alertOptionKey) ? this._alertOptions[alertOptionKey] : LocalesHelper.translate(fallbackTranslateKey)
+  }
+
+  private _hasValidAlertOptionEntry(key) {
+    if (!this._alertOptions)  return false
+    return this._alertOptions.hasOwnProperty(key) && this._alertOptions[key] !== ''
   }
 
   showAlertForUpdate(version: string): Promise<boolean> {

@@ -10,7 +10,6 @@ export interface IStoreUpdateConfig {
 }
 
 export interface AlertOptions {
-  custom? :boolean,
   title?: string,
   message?: string,
   updateButton?: string,
