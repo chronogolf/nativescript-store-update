@@ -11,7 +11,7 @@ import { confirm, ConfirmOptions } from 'tns-core-modules/ui/dialogs'
 
 import { AlertTypesConstants, UpdateTypesConstants } from './constants'
 import { LocalesHelper, VersionHelper } from './helpers'
-import { IStoreUpdateConfig } from './interfaces'
+import { IStoreUpdateConfig, AlertOptions } from './interfaces'
 
 declare var global: any
 const LAST_VERSION_SKIPPED_KEY = 'lastVersionSkipped'
@@ -22,6 +22,7 @@ const defaultConfig: IStoreUpdateConfig = {
   notifyNbDaysAfterRelease: 1,
   patchUpdateAlertType: AlertTypesConstants.NONE,
   revisionUpdateAlertType: AlertTypesConstants.NONE,
+  alertOptions: null,
   onConfirmed: () => console.log('User confirmed!'),
 }
 
@@ -34,6 +35,7 @@ export class StoreUpdateCommon {
   private _revisionUpdateAlertType
   private _notifyNbDaysAfterRelease
   private _onConfirmed
+  private _alertOptions: AlertOptions
 
   constructor(config?: IStoreUpdateConfig) {
     if (config) this._init(config)
@@ -104,19 +106,29 @@ export class StoreUpdateCommon {
 
   buildDialogOptions({ skippable = true } = {}): ConfirmOptions {
     let options = {
-      message: LocalesHelper.translate('ALERT_MESSAGE'),
+      title: this._getMessage('title', 'ALERT_TITLE'),
+      message: this._getMessage('message', 'ALERT_MESSAGE'),
       neutralButtonText: null,
-      okButtonText: LocalesHelper.translate('ALERT_UPDATE_BUTTON'),
-      title: LocalesHelper.translate('ALERT_TITLE'),
+      okButtonText: this._getMessage('updateButton', 'ALERT_UPDATE_BUTTON'),
     }
 
     if (skippable) {
       options = {
         ...options,
-        neutralButtonText: LocalesHelper.translate('ALERT_SKIP_BUTTON'),
+        neutralButtonText: this._getMessage('skipButton', 'ALERT_SKIP_BUTTON'),
       }
     }
+
     return options
+  }
+
+  private _getMessage(alertOptionKey: string, fallbackTranslateKey: string): string {
+    return this._hasValidAlertOptionEntry(alertOptionKey) ? this._alertOptions[alertOptionKey] : LocalesHelper.translate(fallbackTranslateKey)
+  }
+
+  private _hasValidAlertOptionEntry(key) {
+    if (!this._alertOptions) return false
+    return this._alertOptions.hasOwnProperty(key) && this._alertOptions[key] !== ''
   }
 
   showAlertForUpdate(version: string): Promise<boolean> {
@@ -158,6 +170,8 @@ export class StoreUpdateCommon {
     this._notifyNbDaysAfterRelease = conf.notifyNbDaysAfterRelease
     this.countryCode = conf.countryCode
     this._onConfirmed = conf.onConfirmed
+    this._alertOptions = conf.alertOptions
+
     LocalesHelper.changeLang(device.language)
   }
 
