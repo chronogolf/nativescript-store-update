@@ -118,15 +118,6 @@ export class StoreUpdateCommon {
     return options
   }
 
-  private _getMessage(alertOptionKey: string, fallbackTranslateKey: string): string {
-    return this._hasValidAlertOptionEntry(alertOptionKey) ? this._alertOptions[alertOptionKey] : LocalesHelper.translate(fallbackTranslateKey)
-  }
-
-  private _hasValidAlertOptionEntry(key) {
-    if (!this._alertOptions) return false
-    return this._alertOptions.hasOwnProperty(key) && this._alertOptions[key] !== ''
-  }
-
   showAlertForUpdate(version: string): Promise<boolean> {
     const alertType = this.getAlertTypeForVersion(version)
     switch (alertType) {
@@ -226,5 +217,15 @@ export class StoreUpdateCommon {
     }
 
     return -1
+  }
+
+  private _getMessage(alertOptionKey: string, fallbackTranslateKey: string): string {
+    if (this._hasValidAlertOptionEntry(alertOptionKey)) return this._alertOptions[alertOptionKey]
+    return LocalesHelper.translate(fallbackTranslateKey)
+  }
+
+  private _hasValidAlertOptionEntry(key) {
+    if (!this._alertOptions) return false
+    return this._alertOptions.hasOwnProperty(key) && this._alertOptions[key] !== ''
   }
 }
