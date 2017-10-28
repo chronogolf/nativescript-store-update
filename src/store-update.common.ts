@@ -68,10 +68,6 @@ export class StoreUpdateCommon {
     return true
   }
 
-  openStore() {
-    // Overriden by platforms
-  }
-
   setVersionAsSkipped(version: string) {
     appSettings.setString(LAST_VERSION_SKIPPED_KEY, version)
   }

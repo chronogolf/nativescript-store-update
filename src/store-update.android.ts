@@ -14,29 +14,25 @@ app.on(app.resumeEvent, () => {
 })
 
 export class StoreUpdate {
-  private static _storeUpdateCommon
-  private static _instantiated = false
+  private static _common
 
   /*
   *  Public
   */
 
   static init(config: IStoreUpdateConfig) {
-    if (StoreUpdate._instantiated) throw new Error('NS Store Update already configured')
-    StoreUpdate._storeUpdateCommon = new StoreUpdateCommon({
+    if (StoreUpdate._common) throw new Error('NS Store Update already configured')
+    StoreUpdate._common = new StoreUpdateCommon({
       ...config,
       onConfirmed: StoreUpdate._openStore.bind(StoreUpdate),
     })
-    StoreUpdate._instantiated = true
   }
 
   static checkForUpdate() {
-    if (!StoreUpdate._instantiated) return
-    GooglePlayHelper.getAppInfos(StoreUpdate._storeUpdateCommon.getBundleId())
+    if (!StoreUpdate._common) return
+    GooglePlayHelper.getAppInfos(StoreUpdate._common.getBundleId())
       .then(StoreUpdate._extendResults)
-      .then(
-        StoreUpdate._storeUpdateCommon.triggerAlertIfEligible.bind(StoreUpdate._storeUpdateCommon)
-      )
+      .then(StoreUpdate._common.triggerAlertIfEligible.bind(StoreUpdate._common))
       .catch(console.error)
   }
 
@@ -45,7 +41,7 @@ export class StoreUpdate {
    */
 
   protected static _openStore() {
-    const storeUrl = `market://details?id=${StoreUpdate._storeUpdateCommon.getBundleId()}`
+    const storeUrl = `market://details?id=${StoreUpdate._common.getBundleId()}`
     utils.openUrl(storeUrl)
   }
 

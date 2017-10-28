@@ -10,11 +10,24 @@ if (!platform.isIOS) return
 
 describe('StoreUpdate IOS ', () => {
   beforeAll(() => {
-    StoreUpdate.init(testConstants.config)
+    try {
+      StoreUpdate.init(testConstants.config)
+    } catch (err) {
+      console.log(`StoreUpdate already init in another test`)
+    }
+  })
+
+  it(`can't be init more than once`, () => {
+    const newConf = Object.assign({}, testConstants.config, {
+      countryCode: 'fr',
+    })
+    const secondInit = () => StoreUpdate.init(newConf)
+    expect(secondInit).toThrow()
   })
 
   describe('_openStore function', () => {
     it('opens store page', () => {
+      StoreUpdate._trackViewUrl = testConstants.ios.trackViewUrl
       const storeURL = NSURL.URLWithString(testConstants.ios.storeURL).absoluteString
       spyOn(utils, 'openUrl')
       StoreUpdate._openStore()

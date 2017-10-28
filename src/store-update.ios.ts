@@ -12,7 +12,7 @@ export * from './interfaces'
 
 app.ios.delegate = ForegroundDelegage
 
-export class StoreUpdate extends StoreUpdateCommon {
+export class StoreUpdate {
   private static _common
   private static _trackViewUrl
 

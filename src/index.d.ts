@@ -1,17 +1,12 @@
-import { StoreUpdateCommon } from "./store-update.common";
-import { IStoreUpdateConfig } from './interfaces'
-export * from "./constants";
-export * from "./helpers";
-export * from "./interfaces";
-export declare class StoreUpdate extends StoreUpdateCommon {
-    private static _checkHasTimeouted;
-    private static _timeoutChecker;
-    private static _looperChecker;
-    static checkForUpdate(): void;
+import { IStoreUpdateConfig } from './interfaces';
+export * from './constants';
+export * from './helpers';
+export * from './interfaces';
+export declare class StoreUpdate {
+    private static _common;
     static init(config: IStoreUpdateConfig): void;
-    static getBundleId(): string;
-    static getLocalVersionNumber(): string;
-    private static _extendResults(result);
-    protected static _triggerAlertIfEligible(result);
+    static checkForUpdate(): void;
     protected static _openStore(): void;
+    private static _extendResults(result);
+    private static _trackViewUrl;
 }

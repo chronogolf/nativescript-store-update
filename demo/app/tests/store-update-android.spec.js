@@ -10,15 +10,19 @@ if (!platform.isAndroid) return
 
 describe('StoreUpdate ANDROID ', () => {
   beforeAll(() => {
-    StoreUpdate.init(testConstants.config)
+    try {
+      StoreUpdate.init(testConstants.config)
+    } catch (err) {
+      console.log(`StoreUpdate already init in another test`)
+    }
   })
 
-  describe('_openStore function', () => {
-    it('opens store page', () => {
-      spyOn(utils, 'openUrl')
-      StoreUpdate._openStore()
-      expect(utils.openUrl).toHaveBeenCalledWith(testConstants.android.storeURL)
+  it(`can't be init more than once`, () => {
+    const newConf = Object.assign({}, testConstants.config, {
+      countryCode: 'fr',
     })
+    const secondInit = () => StoreUpdate.init(newConf)
+    expect(secondInit).toThrow()
   })
 
   describe('_extendResults function', () => {
@@ -35,6 +39,14 @@ describe('StoreUpdate ANDROID ', () => {
         version: results.version,
       }
       expect(StoreUpdate._extendResults(results)).toEqual(extendedResults)
+    })
+  })
+
+  describe('_openStore function', () => {
+    it('opens store page', () => {
+      spyOn(utils, 'openUrl')
+      StoreUpdate._openStore()
+      expect(utils.openUrl).toHaveBeenCalledWith(testConstants.android.storeURL)
     })
   })
 })

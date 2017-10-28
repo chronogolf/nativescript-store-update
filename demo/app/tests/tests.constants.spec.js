@@ -64,7 +64,8 @@ const HTTPResponse = {
 const ios = {
   urlWithCountryCode: `https://itunes.apple.com/lookup?bundleId=${environment.appId}&hl=${environment.countryCode}`,
   urlWithoutCountryCode: `https://itunes.apple.com/lookup?bundleId=${environment.appId}`,
-  storeURL: `itms-apps://itunes.com/app/${environment.appId}`,
+  trackViewUrl: `https://itunes.apple.com/us/app/bitmoji/id868077558?mt=8&uo=4`,
+  storeURL: `itms-apps://itunes.apple.com/us/app/bitmoji/id868077558?mt=8&uo=4`,
   validResource: {
     resultCount: 3,
     results: [1, 2, 3],
