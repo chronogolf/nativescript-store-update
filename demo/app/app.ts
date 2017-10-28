@@ -5,23 +5,13 @@ import './bundle-config'
 import { AlertTypesConstants, StoreUpdate } from 'nativescript-store-update'
 import * as application from 'tns-core-modules/application'
 
-/*
 StoreUpdate.init({
   majorUpdateAlertType: AlertTypesConstants.OPTION,
-  notifyNbDaysAfterRelease: 1,
-})
-*/
-
-//Custom message testing
-StoreUpdate.init({
-  majorUpdateAlertType: AlertTypesConstants.OPTION,
-  notifyNbDaysAfterRelease: 1,
+  notifyNbDaysAfterRelease: 0,
   alertOptions: {
-    title: "Attention",
-    //message: "Your app is busted out of date",
-    //updateButton: "Update now",
-    skipButton: "Skip" //Ignoring, testing fallback to Localehelper
-  }
+    title: 'Attention please',
+    message: 'Your app is out of date',
+  },
 })
 
 application.start({ moduleName: 'main-page' })
