@@ -1,5 +1,10 @@
 # Nativescript-store-update
 
+[![npm](https://img.shields.io/npm/v/nativescript-store-update.svg)](https://www.npmjs.com/package/nativescript-store-update)
+[![npm](https://img.shields.io/npm/dt/nativescript-store-update.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-store-update)
+
+[![NPM](https://nodei.co/npm/nativescript-store-update.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nativescript-store-update/)
+
 This plugin allows you to define a notification strategy regarding your app updates. You are able to specify if you want to force, offer or ignore an update based on the new version available in the platform store.
 
 For example, you could want to force all major version update, but offer the option to your user to chose to update or skip a minor or patch version.
@@ -34,7 +39,9 @@ In your `main.ts` or `app.ts` file, before app start, call `StoreUpdate.init` wi
 
 ## Localization
 
-Translations are handled via json files which are located in `src/i18n` folder and required by hand in the `src/helpers/locales.helper.ts` file. If you want to contribute a regionalized translation, you must use the `lang-regionCode` format specified in [Apple doc](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html), but with the country lowercased (ex: `fr-ca`, `en-us`)
+The plugin contains some default translations inside json files located in `src/i18n` folder and required by hand in the `src/helpers/locales.helper.ts` file.
+You can also specify a custom translation in the plugin initialization through the configuraiton options.
+If you want to contribute a regionalized translation, you must use the `lang-regionCode` format specified in [Apple doc](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/LanguageandLocaleIDs/LanguageandLocaleIDs.html), but with the country lowercased (ex: `fr-ca`, `en-us`)
 
 
 ## API
@@ -60,10 +67,10 @@ Translations are handled via json files which are located in `src/i18n` folder a
 ### AlertOptions configuration (Optional)
 | Property | Default | Description |
 | --- | --- | --- |
-| **title** | LocaleText | Dialog title, fallback to the local json |
-| **message** | LocaleText | Dialog body text, fallback to the local json |
-| **updateButton** | LocaleText | Dialog update button, fallback to the local json |
-| **skipButton** | LocaleText | Dialog skip button, fallback to the local json |
+| **title** | LocaleText | Dialog title, fallback to the locale json |
+| **message** | LocaleText | Dialog body text, fallback to the locale json |
+| **updateButton** | LocaleText | Dialog update button, fallback to the locale json |
+| **skipButton** | LocaleText | Dialog skip button, fallback to the locale json |
 
 ## Development
 
@@ -79,3 +86,9 @@ You can change parameters passed ton package init in `main.ts` or `app.ts` files
 ## License
 
 Apache License Version 2.0, January 2004
+
+
+## Contributors
+- [Jérémy Pelé](https://github.com/jeremypele)
+- [Simon Bats](https://github.com/SBats)
+- [Steve McNiven-Scott](https://github.com/sitefinitysteve)
