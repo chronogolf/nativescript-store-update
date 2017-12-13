@@ -4,13 +4,10 @@ import * as utils from 'tns-core-modules/utils/utils'
 import { AppStoreHelper } from './helpers'
 import { IAppleStoreResult, IStoreUpdateConfig } from './interfaces'
 import { StoreUpdateCommon } from './store-update.common'
-import { ForegroundDelegage } from './store-update.delegate'
 
 export * from './constants'
 export * from './helpers'
 export * from './interfaces'
-
-app.ios.delegate = ForegroundDelegage
 
 export class StoreUpdate {
   private static _common
@@ -26,6 +23,11 @@ export class StoreUpdate {
       ...config,
       onConfirmed: StoreUpdate._openStore.bind(StoreUpdate),
     })
+
+    //Hook into resume event to check for version
+    app.on(app.resumeEvent, function (args) {
+        StoreUpdate.checkForUpdate();
+    });
   }
 
   static checkForUpdate() {
