@@ -1,40 +1,40 @@
 {
-  "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "readme": "NativeScript Application",
-  "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "com.bitstrips.imoji",
     "tns-android": {
-      "version": "3.2.0"
+      "version": "6.5.0"
     },
     "tns-ios": {
-      "version": "3.2.0"
+      "version": "6.5.0"
     }
   },
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
   "dependencies": {
-    "@angular/animations": "~4.2.0",
-    "@angular/common": "~4.2.0",
-    "@angular/compiler": "~4.2.0",
-    "@angular/core": "~4.2.0",
-    "@angular/forms": "~4.2.0",
-    "@angular/http": "~4.2.0",
-    "@angular/platform-browser": "~4.2.0",
-    "@angular/router": "~4.2.0",
-    "nativescript-angular": "~4.2.0",
-    "nativescript-appversion": "^1.4.1",
+    "@angular/animations": "~8.2.0",
+    "@angular/common": "~8.2.0",
+    "@angular/compiler": "~8.2.0",
+    "@angular/core": "~8.2.0",
+    "@angular/forms": "~8.2.0",
+    "@angular/platform-browser": "~8.2.0",
+    "@angular/platform-browser-dynamic": "~8.2.0",
+    "@angular/router": "~8.2.0",
+    "@nativescript/theme": "~2.3.3",
+    "nativescript-angular": "~8.21.0",
+    "nativescript-appversion": "^1.4.4",
     "nativescript-store-update": "file:../src",
-    "reflect-metadata": "~0.1.8",
-    "rxjs": "~5.4.2",
-    "tns-core-modules": "~3.1.0",
-    "zone.js": "~0.8.2"
+    "reflect-metadata": "~0.1.12",
+    "rxjs": "^6.4.0",
+    "tns-core-modules": "~6.5.0",
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "babel-traverse": "6.26.0",
-    "babel-types": "6.26.0",
-    "babylon": "6.18.0",
-    "lazy": "1.0.11",
-    "nativescript-dev-typescript": "~0.5.0",
-    "typescript": "~2.4.2"
-  }
+    "@angular/compiler-cli": "~8.2.0",
+    "@ngtools/webpack": "~8.2.0",
+    "nativescript-dev-webpack": "~1.5.1",
+    "typescript": "~3.5.3"
+  },
+  "gitHead": "2250137db8c1e0bd0eb543e8e4563cb71480c00d",
+  "readme": "NativeScript Application"
 }
