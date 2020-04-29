@@ -4,8 +4,9 @@ export class LocalesHelper {
   private static _defaultLang = 'en'
   private static _translations = {
     en: require('../i18n/en.json'),
+    es: require('../i18n/es.json'),
     fr: require('../i18n/fr.json'),
-    es: require('../i18n/es.json')
+    nl: require('../i18n/nl.json'),
   }
 
   static translate(key: string): string {
