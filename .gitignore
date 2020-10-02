@@ -25,3 +25,5 @@ demo-angular/hooks
 demo-angular/platforms
 src/node_modules
 src/hooks
+*.tgz
+package-lock.json
