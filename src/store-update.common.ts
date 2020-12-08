@@ -1,13 +1,7 @@
-require('./assign.helper')
-
 import * as moment from 'moment'
-import * as app from 'tns-core-modules/application'
-import * as appSettings from 'tns-core-modules/application-settings'
-import { Observable } from 'tns-core-modules/data/observable'
-import { device } from 'tns-core-modules/platform'
+import { Application, ApplicationSettings, Observable, Device, Dialogs, ConfirmOptions } from '@nativescript/core'
 
-import { getAppIdSync, getVersionCodeSync, getVersionNameSync } from 'nativescript-appversion'
-import { confirm, ConfirmOptions } from 'tns-core-modules/ui/dialogs'
+import { getAppIdSync, getVersionCodeSync, getVersionNameSync } from '@nativescript/appversion'
 
 import { AlertTypesConstants, UpdateTypesConstants } from './constants'
 import { LocalesHelper, VersionHelper } from './helpers'
@@ -69,7 +63,7 @@ export class StoreUpdateCommon {
   }
 
   setVersionAsSkipped(version: string) {
-    appSettings.setString(LAST_VERSION_SKIPPED_KEY, version)
+    ApplicationSettings.setString(LAST_VERSION_SKIPPED_KEY, version)
   }
 
   triggerAlertForUpdate(version: string) {
@@ -123,11 +117,11 @@ export class StoreUpdateCommon {
     switch (alertType) {
       case AlertTypesConstants.FORCE: {
         const options: ConfirmOptions = this.buildDialogOptions({ skippable: false })
-        return confirm(options)
+        return Dialogs.confirm(options)
       }
       case AlertTypesConstants.OPTION: {
         const options: ConfirmOptions = this.buildDialogOptions()
-        return confirm(options)
+        return Dialogs.confirm(options)
       }
       default:
         return Promise.reject(null)
@@ -159,7 +153,7 @@ export class StoreUpdateCommon {
     this._onConfirmed = conf.onConfirmed
     this._alertOptions = conf.alertOptions
 
-    LocalesHelper.changeLang(device.language)
+    LocalesHelper.changeLang(Device.language)
   }
 
   private _isAppStoreVersionNewer(storeVersion: string): boolean {
@@ -168,7 +162,7 @@ export class StoreUpdateCommon {
   }
 
   private _isCurrentVersionSkipped(currentAppStoreVersion: string): boolean {
-    const lastVersionSkipped = appSettings.getString(LAST_VERSION_SKIPPED_KEY)
+    const lastVersionSkipped = ApplicationSettings.getString(LAST_VERSION_SKIPPED_KEY)
     return currentAppStoreVersion === lastVersionSkipped
   }
 

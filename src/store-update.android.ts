@@ -1,5 +1,4 @@
-import * as app from 'tns-core-modules/application'
-import * as utils from 'tns-core-modules/utils/utils'
+import { Application, Utils } from '@nativescript/core'
 
 import { GooglePlayHelper } from './helpers'
 import { IGoogleStoreResult, IStoreUpdateConfig } from './interfaces'
@@ -9,7 +8,7 @@ export * from './constants'
 export * from './helpers'
 export * from './interfaces'
 
-app.on(app.resumeEvent, () => {
+Application.on(Application.resumeEvent, () => {
   StoreUpdate.checkForUpdate()
 })
 
@@ -42,7 +41,7 @@ export class StoreUpdate {
 
   protected static _openStore() {
     const storeUrl = `market://details?id=${StoreUpdate._common.getBundleId()}`
-    utils.openUrl(storeUrl)
+    Utils.openUrl(storeUrl)
   }
 
   /*

@@ -1,6 +1,4 @@
-import * as app from 'tns-core-modules/application'
-import * as http from 'tns-core-modules/http'
-import * as utils from 'tns-core-modules/utils/utils'
+import { Application, Http, Utils } from '@nativescript/core'
 import { AppStoreHelper } from './helpers'
 import { IAppleStoreResult, IStoreUpdateConfig } from './interfaces'
 import { StoreUpdateCommon } from './store-update.common'
@@ -25,7 +23,7 @@ export class StoreUpdate {
     })
 
     //Hook into resume event to check for version
-    app.on(app.resumeEvent, function (args) {
+    Application.on(Application.resumeEvent, function (args) {
         StoreUpdate.checkForUpdate();
     });
   }
@@ -44,7 +42,7 @@ export class StoreUpdate {
 
   protected static _openStore() {
     // App Path
-    utils.openUrl(
+    Utils.openUrl(
       NSURL.URLWithString(`itms-apps${StoreUpdate._trackViewUrl.slice(5)}`).absoluteString
     )
   }

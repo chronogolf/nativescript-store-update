@@ -15,7 +15,7 @@ You can also specify how many days after the update release you want to display 
 
 You need to add appversion plugins for this one to work:
 ```zsh
-tns plugin add nativescript-appversion
+tns plugin add @nativescript/appversion
 ```
 
 ## Installation
