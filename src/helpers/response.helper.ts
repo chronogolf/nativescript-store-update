@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 export class ResponseHelper {
   static handleErrorStatus(response: Response): Response {
     if (response.status >= 400) {
